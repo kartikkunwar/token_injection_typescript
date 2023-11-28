@@ -1,0 +1,69 @@
+.main{
+  width: 80%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  grid-template-rows: auto;
+  gap: 20px;
+  text-align: center;
+  margin-top: 50px;
+}
+div>h1{
+  text-align: center;
+}
+
+.form {
+  width: 30%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 50px;
+}
+
+.form>div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+label {
+  width: 30%;
+}
+
+input {
+  width: 60%;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.form>button {
+  width: 50%;
+  margin: auto;
+  margin-top: 50px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: teal;
+  color: white;
+  font-size: 22px;
+}
+.single{
+  width: 40%;
+  margin: auto;
+}
+.single>img{
+  width: 100%;
+  height: 400px;
+}
+span{
+  color: red;
+}
+.dropdown{
+  width: 10%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
