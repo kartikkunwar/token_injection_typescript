@@ -53,6 +53,12 @@ export const Login=()=>{
             setMessage(false)
             setPass(false)
             dispatch(getLoginToken(log))
+            .then((res:any)=>{
+                if(res.payload==="something went wrong"){
+                    alert("wrong email or password")
+                }
+            })
+            .catch((err:any)=>console.log(err))
         }
     }
     const handlelaguage=(e:ChangeEvent<HTMLSelectElement>)=>{
