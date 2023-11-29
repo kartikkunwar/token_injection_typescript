@@ -1,6 +1,6 @@
 {
-    "not valid":"not valid",
+    "invalid email":"invalid email",
     "required":"required",
-    "minimum 6 characters":"minimum 6 characters",
-    "30 character max": "30 character max"
+    "password must be at least 6 characters":"password must be at least 6 characters",
+    "password must be at most 12 characters": "password must be at most 12 characters"
 }

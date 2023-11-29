@@ -1,6 +1,6 @@
 {
-    "not valid":"अमान्य ईमेल",
+    "invalid email":"अमान्य ईमेल",
     "required":"आवश्यक",
-    "minimum 6 characters":"न्यूनतम 6 अक्षर",
-    "30 character max":"अधिकतम 30 अक्षर"
+    "password must be at least 6 characters":"पासवर्ड कम से कम 6 अंकों का होना चाहिए",
+    "password must be at most 12 characters": "पासवर्ड अधिकतम 12 अक्षर का होना चाहिए"
 }

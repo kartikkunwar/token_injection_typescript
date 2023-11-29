@@ -99,10 +99,33 @@ span{
 .vbutton{
   width: 100%;
   margin: auto;
-  padding: 20px;
+  padding: 10px;
   border-radius: 20px;
   background-color: teal;
   color: white;
-  font-size: 29px;
+  font-size: 26px;
   margin-top: 30px;
+}
+.logged{
+ width: 30%;
+ margin: auto;
+ margin-top: 100px;
+ box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ padding: 30px;
+}
+.insidelogged{
+  display: flex;
+  flex-direction: column;
+  gap: .10px;
+}
+input{
+  padding: 20px;
+  font-size: 18px;
+  border: 1px solid gray;
+  width: 80%;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
