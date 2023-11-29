@@ -1,4 +1,6 @@
 {
-    "invalid email":"invalid email",
-    "length is less than five":"length is less than five"
+    "not valid":"not valid",
+    "required":"required",
+    "minimum 6 characters":"minimum 6 characters",
+    "30 character max": "30 character max"
 }

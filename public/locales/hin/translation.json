@@ -1,4 +1,6 @@
 {
-    "invalid email":"अमान्य ईमेल",
-    "length is less than five":"लंबाई पाँच से कम है"
+    "not valid":"अमान्य ईमेल",
+    "required":"आवश्यक",
+    "minimum 6 characters":"न्यूनतम 6 अक्षर",
+    "30 character max":"अधिकतम 30 अक्षर"
 }

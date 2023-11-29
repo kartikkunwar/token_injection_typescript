@@ -67,3 +67,42 @@ span{
   display: flex;
   justify-content: space-around;
 }
+.vform{
+  width: 40%;
+  margin: auto;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 20px;
+  padding: 30px;
+  margin-top: 30px;
+}
+.vbox{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.vbox>div:nth-child(1){
+  width: 10%;
+}
+.vbox>div:nth-child(2){
+  width: 60%;
+  margin-top: 30px;
+}
+.label{
+ width: 100%;
+}
+.vinput{
+  width: 100%;
+}
+.vspan{
+  width: 100%;
+}
+.vbutton{
+  width: 100%;
+  margin: auto;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: teal;
+  color: white;
+  font-size: 29px;
+  margin-top: 30px;
+}

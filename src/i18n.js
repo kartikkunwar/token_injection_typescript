@@ -10,15 +10,9 @@ const option={
     order:['navigator','htmlTag','path','subdomain'],
     checkwhitelist:true
 }
-i18n
+
   
-  .use(Backend)
-  
-  .use(LanguageDetector)
-  
-  .use(initReactI18next)
- 
-  .init({
+i18n.use(Backend).use(LanguageDetector).use(initReactI18next).init({
     fallbackLng: 'en',
     debug: true,
     whitelist:availablelanguage,
