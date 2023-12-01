@@ -11,6 +11,19 @@
 div>h1{
   text-align: center;
 }
+.navbar{
+  display: flex;
+  justify-content: space-evenly;
+  height: 80px;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  font-size: 25px;
+}
+.link{
+  text-decoration: none;
+  color: black;
+  font-weight: bolder;
+}
 
 .form {
   width: 30%;

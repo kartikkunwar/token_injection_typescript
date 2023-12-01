@@ -1,6 +1,23 @@
 import { createAsyncThunk ,createSlice,PayloadAction} from "@reduxjs/toolkit"
 import { axiosInstance } from "../../../service/axiosinstance"
 import axios from "axios"
+// import {store} from "../store"
+
+// class apiinstance{
+//     constructor(){
+
+//          const axiosInstances=axios.create({
+//             baseURL:`https://fakestoreapi.com/`
+//         });
+        
+//         axiosInstances.interceptors.request.use((request)=>{
+//             const data=store.getState()
+//             const token=data.product.token
+//             request.headers.token=token
+//             return request
+//         })
+//     }
+// }
 
 interface IInitialState{
     product:any[]
@@ -32,12 +49,49 @@ export const getProduct=createAsyncThunk(
     }
 )
 
+export const confirmmail=createAsyncThunk(
+    "confirm",
+    async(data:any,ThunkAPI)=>{
+        try{
+            const res=await axios.post("http://localhost:8000/mail",data)
+            return res.data
+        }catch(err){
+            console.log(err)
+        }
+    }
+)
+
+export const edituserinfo=createAsyncThunk(
+    "changepass",
+    async(data:any,ThunkAPI)=>{
+        try{
+            const res=await axios.patch("http://localhost:8000/edituser",data)
+            console.log(res)
+        }catch(err){
+            console.log(err)
+        }
+    }
+)
+
+export const createuser=createAsyncThunk(
+    "add user",
+    async(data:any,ThunkAPI)=>{
+        try{
+            const res=await axios.post("http://localhost:8000/signup",data)
+            return res.data
+        }catch(err){
+            console.log(err)
+        }
+    }
+)
+
 export const getLoginToken=createAsyncThunk(
     "gettoken",
     async (login:any,ThunkAPI)=>{
         try{
-            const res=await axios.post("https://api.volks-verein.com/api/v1/Auth/Login",login) 
-            return res.data.data.accessToken
+            const res=await axios.post("http://localhost:8000/login",login) 
+            localStorage.setItem("usertoken",JSON.stringify(res.data.token))
+            return res.data.token
         }catch(err){
             return ThunkAPI.rejectWithValue("something went wrong")
         }
