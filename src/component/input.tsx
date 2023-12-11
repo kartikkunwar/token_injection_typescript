@@ -14,8 +14,8 @@ export const Input=({ name, label, type, id, placeholder, errormessage, register
     const {t}=useTranslation();
     return(
         <div className="insidelogged">
-            <label htmlFor={id}>{label}</label>
-            <input type={type} name={name} placeholder={placeholder} {...register}/>
+            <label >{label}</label>
+            <input type={type} name={name} placeholder={placeholder} {...register} />
             <span>{t(errormessage)}</span>
         </div>
     )

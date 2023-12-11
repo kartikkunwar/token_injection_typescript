@@ -1,23 +1,6 @@
 import { createAsyncThunk ,createSlice,PayloadAction} from "@reduxjs/toolkit"
 import { axiosInstance } from "../../../service/axiosinstance"
 import axios from "axios"
-// import {store} from "../store"
-
-// class apiinstance{
-//     constructor(){
-
-//          const axiosInstances=axios.create({
-//             baseURL:`https://fakestoreapi.com/`
-//         });
-        
-//         axiosInstances.interceptors.request.use((request)=>{
-//             const data=store.getState()
-//             const token=data.product.token
-//             request.headers.token=token
-//             return request
-//         })
-//     }
-// }
 
 interface IInitialState{
     product:any[]
