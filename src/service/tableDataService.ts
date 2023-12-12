@@ -51,5 +51,16 @@ export const Tableservice={
         } catch (err) {
             console.log(err)
         }
+    },
+
+
+    //giving data to export as pdf on condition
+    checkfordata : (...args:any) => {
+        const [data,filtereddata]=args
+        if (filtereddata.length) {
+            Tableservice.saveAsPdf(filtereddata)
+        } else {
+            Tableservice.saveAsPdf(data)
+        }
     }
 }

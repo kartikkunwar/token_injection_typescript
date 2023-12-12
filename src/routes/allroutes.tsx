@@ -8,6 +8,7 @@ import { ConfirmEmail } from "../component/confirmemail"
 import { ChangePass } from "../component/changepass"
 import { FormValidationTry } from "../component/formvalidation"
 import { TableItem } from "../component/tablecomponent/table"
+import { UserTable } from "../pages/userTable"
 
 
 
@@ -19,7 +20,7 @@ export const AllRoutes = () => {
             <Route path="/changepass/:id" element={<ChangePass/>}/>
             <Route path="/confirmemail" element={<ConfirmEmail/>}/>
             <Route path="/try" element={<FormValidationTry/>}/>
-            <Route path="/table" element={<TableItem/>}/>
+            <Route path="/table" element={<UserTable/>}/>
             <Route element={<ProtectedRoute />}>
                 <Route path="/product" element={<Product />}/>
                 <Route path="/product/:id" element={<SingleProduct />}/>
