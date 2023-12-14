@@ -61,48 +61,43 @@ function DataTableBase({ coloumn, url, category, getdata, filter }: any): JSX.El
     }
 
     return (
-        <>
-            <DataTable
-                columns={coloumn}
-                data={beingSearched ? filtereddata : data}
-                pagination
-                dense
-                selectableRows
-                paginationServer
-                paginationTotalRows={totalRows}
-                onChangeRowsPerPage={(row: any) => setPerPage(row)}
-                onChangePage={(page: any) => setPage(page)}
-                fixedHeader
-                fixedHeaderScrollHeight="430px"
-                selectableRowsHighlight
-                highlightOnHover
-                subHeader
-                subHeaderComponent={<input type="text" placeholder="search here..." className="tablesearch" value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value) }} />}
-                actions={
-                    <div>
-                        <button onClick={() => Tableservice.saveAsExcel(beingSearched ? filtereddata : data)}>Export to excel</button>
-                        <button onClick={() => Tableservice.checkfordata(data, filtereddata, category)}>Export to PDF</button>
-                    </div>
-                }
-                onSort={handlesort}
-                sortServer
-                onSelectedRowsChange={getrowdata}
-                className="table"
-            />
-            {
-                tableloader && <div className="loader">
-                    <Circles
-                        height="80"
-                        width="80"
-                        color="#4fa94d"
-                        ariaLabel="circles-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                        visible={true}
-                    />
+        <DataTable
+            columns={coloumn}
+            data={beingSearched ? filtereddata : data}
+            pagination
+            dense
+            selectableRows
+            paginationServer
+            paginationTotalRows={totalRows}
+            onChangeRowsPerPage={(row: any) => setPerPage(row)}
+            onChangePage={(page: any) => setPage(page)}
+            fixedHeader
+            fixedHeaderScrollHeight="430px"
+            selectableRowsHighlight
+            highlightOnHover
+            subHeader
+            subHeaderComponent={<input type="text" placeholder="search here..." className="tablesearch" value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value) }} />}
+            actions={
+                <div>
+                    <button onClick={() => Tableservice.saveAsExcel(beingSearched ? filtereddata : data)}>Export to excel</button>
+                    <button onClick={() => Tableservice.checkfordata(data, filtereddata, category)}>Export to PDF</button>
                 </div>
             }
-        </>
+            onSort={handlesort}
+            sortServer
+            onSelectedRowsChange={getrowdata}
+            className="table"
+            progressPending={tableloader}
+            progressComponent={<div className="loader"><Circles
+                height="80"
+                width="80"
+                color="#4fa94d"
+                ariaLabel="circles-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+            /></div>}
+        />
     );
 }
 

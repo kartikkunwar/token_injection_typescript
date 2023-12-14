@@ -150,5 +150,7 @@ form{
   display: flex;
   width: 10%;
   margin: auto;
+  align-items: center;
+  margin-top: 10%;
 }
 
