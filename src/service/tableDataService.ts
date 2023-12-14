@@ -7,13 +7,26 @@ import * as XLSX from "xlsx"
 export const Tableservice={
 
     //function for exporting data as pdf file
-    saveAsPdf:function(dataToPrint: any){
+    saveAsPdf:function(dataToPrint: any,category:any){
+        var col;
+        var rows;
+        switch(category){
+            case "users":
+                 col=[['Id', 'Image', 'Age', 'First Name', 'Last Name', 'Email']];
+                 rows=dataToPrint.map((el: any) => {
+                    return [el.id, el.image, el.age, el.firstName, el.lastName, el.email]
+                    
+                })
+                 break;
+            case "products":
+                col=[['Id', 'Image', 'Title', 'Brand', 'Category', 'Price']];
+                 rows=dataToPrint.map((el: any) => {
+                    return [el.id, el.thumbnail, el.title, el.brand, el.category, el.price]
+                    
+                })
+                 break;
+        }
         const doc = new jsPDF({ orientation: 'landscape' });
-        var col: any = [['Id', 'Image', 'Age', 'First Name', 'Last Name', 'Email']];
-        const rows=dataToPrint.map((el: any) => {
-            return [el.id, el.image, el.age, el.firstName, el.lastName, el.email]
-            
-        })
 
         autoTable(doc, {
             head: col,
@@ -21,6 +34,7 @@ export const Tableservice={
         })
         doc.save("data.pdf")
     },
+
 
     //function for exporting data as excel file
     saveAsExcel:function(data:any){
@@ -33,20 +47,30 @@ export const Tableservice={
 
     //api call for getting data per page
     getData : async (...args:any) => {
-        const [page,perPage]=args
+        const [url,page,perPage,filter,sortBy,order]=args
+        const query={
+            params:{
+                limit:perPage,
+                skip:(page*perPage)-perPage,
+                sortBy,
+                order,
+                name:filter.name,
+                gender:filter.gender
+            }
+        }
         try {
-            const res = await axios.get(`https://dummyjson.com/users?limit=${perPage}&skip=${(page*perPage)-perPage}`)
+            const res = await axios.get(`${url}`,query)
             return res
         } catch (err) {
-            console.log('')
+            console.log(err)
         }
     },
 
     //api call for search functionality
     getSearchedData : async (...args:any) => {
-        const [search,page,perPage]=args
+        const [url,search,page,perPage,filter]=args
         try {
-            const res = await axios.get(`https://dummyjson.com/users/search?q=${search}&limit=${perPage}&skip=${(page * perPage) - perPage}`)
+            const res = await axios.get(`${url}/search?q=${search}&limit=${perPage}&skip=${(page * perPage) - perPage}`,{params:filter})
             return res
         } catch (err) {
             console.log(err)
@@ -56,11 +80,11 @@ export const Tableservice={
 
     //giving data to export as pdf on condition
     checkfordata : (...args:any) => {
-        const [data,filtereddata]=args
+        const [data,filtereddata,category]=args
         if (filtereddata.length) {
-            Tableservice.saveAsPdf(filtereddata)
+            Tableservice.saveAsPdf(filtereddata,category)
         } else {
-            Tableservice.saveAsPdf(data)
+            Tableservice.saveAsPdf(data,category)
         }
     }
 }

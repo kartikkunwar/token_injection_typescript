@@ -3,12 +3,11 @@ import { Product } from "../component/product"
 import { SingleProduct } from "../component/singleproduct"
 import { ProtectedRoute } from "./protectedroute"
 import { Login } from "../component/login"
-import { Signup } from "../component/signup"
 import { ConfirmEmail } from "../component/confirmemail"
 import { ChangePass } from "../component/changepass"
 import { FormValidationTry } from "../component/formvalidation"
-import { TableItem } from "../component/tablecomponent/table"
 import { UserTable } from "../pages/userTable"
+import { Signup } from "../component/signup"
 
 
 

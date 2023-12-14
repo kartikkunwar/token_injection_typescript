@@ -1,4 +1,3 @@
-import { TableItem } from "./tablecomponent/table"
 import { Validation } from "./validation"
 
 
@@ -33,7 +32,6 @@ const {errors,handlechange}:any=Validation()
                 }
                 <button type="submit">Submit</button>
             </form>
-            <TableItem />
         </div>
     )
 }
