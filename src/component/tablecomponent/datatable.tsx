@@ -4,8 +4,17 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Tableservice } from "../../service/tableDataService";
 import { Circles } from "react-loader-spinner";
 
+interface IDataTableBase<T>{
+    coloumn:Array<object>,
+    url:string,
+    category:string,
+    getdata:(arg:T)=>void,
+    filter:object,
+}
 
-function DataTableBase({ coloumn, url, category, getdata, filter }: any): JSX.Element {
+
+function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
+    const {coloumn,url,category,getdata,filter}=props
 
     const [data, setData] = useState([])
     const [filtereddata, setFiltereddata] = useState([])

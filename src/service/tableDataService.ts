@@ -5,9 +5,9 @@ import * as XLSX from "xlsx"
 
 
 export const Tableservice={
-
     //function for exporting data as pdf file
-    saveAsPdf:function(dataToPrint: any,category:any){
+    saveAsPdf:function(...args:any){
+        const [dataToPrint,category]=args
         var col;
         var rows;
         switch(category){

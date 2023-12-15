@@ -54,7 +54,7 @@ export const coloumn: TableColumn<DataRow>[] = [
 ]
 
 export const UserTable = () => {
-    const [reload,setReload]=useState(true)
+    const [reload,setReload]=useState(0)
     const filter={name:'a',gender:'M'}; 
        const url="https://dummyjson.com/users"
        const category="users"
@@ -74,7 +74,7 @@ export const UserTable = () => {
        }
     return (
         <div>
-            <button onClick={()=>setReload(!reload)}>Reload</button>
+            <button onClick={()=>setReload(Math.random())}>Reload</button>
             <DataTableBase {...props}/>
         </div>
     )
