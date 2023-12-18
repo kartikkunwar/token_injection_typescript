@@ -74,7 +74,7 @@ export const UserTable = () => {
        }
     return (
         <div>
-            <button onClick={()=>setReload(Math.random())}>Reload</button>
+            <button onClick={()=>setReload(Math.floor(Math.random() * 10))}>Reload</button>
             <DataTableBase {...props}/>
         </div>
     )

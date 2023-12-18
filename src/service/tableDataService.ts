@@ -4,10 +4,10 @@ import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx"
 
 
+
 export const Tableservice={
     //function for exporting data as pdf file
-    saveAsPdf:function(...args:any){
-        const [dataToPrint,category]=args
+    saveAsPdf:function(dataToPrint:Array<object>,category:string):void{
         var col;
         var rows;
         switch(category){
@@ -37,7 +37,7 @@ export const Tableservice={
 
 
     //function for exporting data as excel file
-    saveAsExcel:function(data:any){
+    saveAsExcel:function(data:Array<object>):void{
         var wb=XLSX.utils.book_new(),
         ws=XLSX.utils.json_to_sheet(data);
 
@@ -62,7 +62,7 @@ export const Tableservice={
             const res = await axios.get(`${url}`,query)
             return res
         } catch (err) {
-            console.log(err)
+            return err
         }
     },
 
@@ -73,7 +73,7 @@ export const Tableservice={
             const res = await axios.get(`${url}/search?q=${search}&limit=${perPage}&skip=${(page * perPage) - perPage}`,{params:filter})
             return res
         } catch (err) {
-            console.log(err)
+            return err
         }
     },
 
