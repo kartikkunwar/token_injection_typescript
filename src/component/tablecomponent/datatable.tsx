@@ -3,14 +3,8 @@ import useDebounce from "../../hooks/useDebounce";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Tableservice } from "../../service/tableDataService";
 import { Circles } from "react-loader-spinner";
+import { IDataTableBase } from "../../database";
 
-interface IDataTableBase<T>{
-    coloumn:Array<object>,
-    url:string,
-    category:string,
-    getdata:(arg:T)=>void,
-    filter:object,
-}
 
 
 function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
@@ -23,7 +17,7 @@ function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
     const [perPage, setPerPage] = useState(10);
     const [search, setSearch] = useState("");
     const [beingSearched, setBeingSearched] = useState(false);
-    const [rowsSelected, setRowsSelected] = useState(false)
+    const [, setRowsSelected] = useState(false)
     const debounceSearch = useDebounce(search, 500)
     const [tableloader, setTableloader] = useState(false)
 
@@ -33,7 +27,7 @@ function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
         if (!debounceSearch) {
             setBeingSearched(false)
             setFiltereddata([])
-            Tableservice.getData(url, page, perPage, filter)
+            Tableservice.getData({url, page, perPage, filter})
                 .then((res: any) => {
                     setTableloader(false)
                     setTotalRows(res.data.total)
@@ -41,7 +35,7 @@ function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
                 })
                 .catch((err: any) => console.log(err))
         } else {
-            Tableservice.getSearchedData(url, debounceSearch, page, perPage, filter).then((res: any) => {
+            Tableservice.getSearchedData({url, search:debounceSearch, page, perPage, filter}).then((res: any) => {
                 setTableloader(false)
                 setTotalRows(res.data.total)
                 setBeingSearched(true)
@@ -56,7 +50,7 @@ function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
     const handlesort = (column: any, sortDirection: any) => {
         const sortBy = column?.name.split(" ").join("").toLowerCase()
         const order = sortDirection
-        Tableservice.getData(url, page, perPage, filter, sortBy, order)
+        Tableservice.getData({url, page, perPage, filter, sortBy, order})
     }
 
     //getting data when selecting single or multiple row
@@ -89,7 +83,7 @@ function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
             actions={
                 <div>
                     <button onClick={() => Tableservice.saveAsExcel(beingSearched ? filtereddata : data)}>Export to excel</button>
-                    <button onClick={() => Tableservice.checkfordata(data, filtereddata, category)}>Export to PDF</button>
+                    <button onClick={() => Tableservice.checkfordata({data, filtereddata, category})}>Export to PDF</button>
                 </div>
             }
             onSort={handlesort}

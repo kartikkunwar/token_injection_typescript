@@ -65,10 +65,10 @@ export const UserTable = () => {
        }
 
        const props={
-        coloumn:coloumn,
-        url:url,
-        category:category,
-        filter:filter,
+        coloumn,
+        url,
+        category,
+        filter,
         key:reload,
         getdata:getitems
        }
