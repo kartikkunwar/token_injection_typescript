@@ -13,7 +13,6 @@ export const Tableservice={
     const {dataToPrint,category}=arg;
         var col;
         var rows;
-        console.log(arg)
         switch(category){
             case "users":
                  col=[['Id', 'Image', 'Age', 'First Name', 'Last Name', 'Email']];
@@ -36,7 +35,7 @@ export const Tableservice={
             head: col,
             body: rows,
         })
-        // doc.save("data.pdf")
+        doc.save("data.pdf")
     },
 
 

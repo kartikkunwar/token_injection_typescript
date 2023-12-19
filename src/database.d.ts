@@ -22,7 +22,7 @@ export interface Icheckdata{
     category:string
 }
 
-export interface IDataTableBase<T>{
+export interface IDataTableBase{
     coloumn:Array<object>,
     url:string,
     category:string,

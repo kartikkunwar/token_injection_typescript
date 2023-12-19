@@ -7,7 +7,7 @@ import { IDataTableBase } from "../../database";
 
 
 
-function DataTableBase<T>(props:IDataTableBase<T>): JSX.Element {
+function DataTableBase(props:IDataTableBase): JSX.Element {
     const {coloumn,url,category,getdata,filter}=props
 
     const [data, setData] = useState([])
