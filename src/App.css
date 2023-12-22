@@ -1,17 +1,19 @@
-.main{
+/* .main {
   width: 80%;
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   gap: 20px;
   text-align: center;
   margin-top: 50px;
 }
-div>h1{
+
+div>h1 {
   text-align: center;
 }
-.navbar{
+
+.navbar {
   display: flex;
   justify-content: space-evenly;
   height: 80px;
@@ -19,7 +21,8 @@ div>h1{
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   font-size: 25px;
 }
-.link{
+
+.link {
   text-decoration: none;
   color: black;
   font-weight: bolder;
@@ -63,24 +66,29 @@ input {
   color: white;
   font-size: 22px;
 }
-.single{
+
+.single {
   width: 40%;
   margin: auto;
 }
-.single>img{
+
+.single>img {
   width: 100%;
   height: 400px;
 }
-span{
+
+span {
   color: red;
 }
-.dropdown{
+
+.dropdown {
   width: 10%;
   margin: auto;
   display: flex;
   justify-content: space-around;
 }
-.vform{
+
+.vform {
   width: 40%;
   margin: auto;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -88,28 +96,35 @@ span{
   padding: 30px;
   margin-top: 30px;
 }
-.vbox{
+
+.vbox {
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
-.vbox>div:nth-child(1){
+
+.vbox>div:nth-child(1) {
   width: 10%;
 }
-.vbox>div:nth-child(2){
+
+.vbox>div:nth-child(2) {
   width: 60%;
   margin-top: 30px;
 }
-.label{
- width: 100%;
-}
-.vinput{
+
+.label {
   width: 100%;
 }
-.vspan{
+
+.vinput {
   width: 100%;
 }
-.vbutton{
+
+.vspan {
+  width: 100%;
+}
+
+.vbutton {
   width: 100%;
   margin: auto;
   padding: 10px;
@@ -119,34 +134,51 @@ span{
   font-size: 26px;
   margin-top: 30px;
 }
-.logged{
- width: 30%;
- margin: auto;
- margin-top: 100px;
- box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
- padding: 30px;
+
+.logged {
+  width: 30%;
+  margin: auto;
+  margin-top: 100px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 30px;
 }
-.insidelogged{
+
+.insidelogged {
   display: flex;
   flex-direction: column;
   gap: .10px;
 }
-input{
+
+input {
   padding: 20px;
   font-size: 18px;
   border: 1px solid gray;
   width: 80%;
 }
-form{
+
+form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+} */
+
+/* .subheader {
+  display: flex;
+  width: 60%;
+  justify-content: space-between;
 }
-.tablesearch{
-  width: 20%;
-  margin: auto;
+.search{
+  width: 30%;
+  padding: 10px 20px;
+  border-radius: 10px;
 }
-.loader{
+.actionbutton{
+  display: flex;  
+}
+.actionbutton>button{
+  border-radius: 20px;
+}
+.loader {
   display: flex;
   width: 10%;
   margin: auto;
@@ -154,3 +186,39 @@ form{
   margin-top: 10%;
 }
 
+.button {
+  padding: 5px;
+  border: none;
+  margin-left: 3px;
+  cursor: pointer;
+}
+
+.button:hover {
+  transform: scale(0.9);
+  transition: all 1.5s ease;
+  background-color: bisque;
+}
+
+.nav{
+  display: flex;
+  justify-content: space-between;
+}
+.nav>button{
+  padding: 5px 20px;
+  border-radius: 5px;
+  border:none;
+  cursor: pointer;
+}
+.nav>button:hover{
+  transform: scale(0.9);
+  transition: all 1.5s ease;
+  background-color: bisque;
+  font-weight: bold;
+}
+.datatable{
+  width: 90%;
+  margin: auto;
+}
+span{
+  color:red;
+} */

@@ -50,11 +50,11 @@ export const Tableservice={
 
     //api call for getting data per page
     getData : async (args:Igetdata) => {
-        const {url,page,perPage,filter,sortBy,order}=args
+        const {url,pages,perPage,filter,sortBy,order}=args
         const query={
             params:{
                 limit:perPage,
-                skip:(page*perPage)-perPage,
+                skip:(pages*perPage)-perPage,
                 sortBy,
                 order,
                 name:filter.name,
@@ -71,9 +71,9 @@ export const Tableservice={
 
     //api call for search functionality
     getSearchedData : async (args:Igetsearched) => {
-        const {url,search,page,perPage,filter}=args
+        const {url,search,pages,perPage,filter}=args
         try {
-            const res = await axios.get(`${url}/search?q=${search}&limit=${perPage}&skip=${(page * perPage) - perPage}`,{params:filter})
+            const res = await axios.get(`${url}/search?q=${search}&limit=${perPage}&skip=${(pages * perPage) - perPage}`,{params:filter})
             return res
         } catch (err) {
             return err

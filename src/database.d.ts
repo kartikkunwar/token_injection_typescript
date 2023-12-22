@@ -5,7 +5,7 @@ export interface Table{
 
 export interface Igetdata{
     url:string,
-    page:number,
+    pages:number,
     perPage:number,
     filter:any,
     sortBy?:string,
@@ -28,4 +28,5 @@ export interface IDataTableBase{
     category:string,
     getdata:(arg:T)=>void,
     filter:object,
+    theme:boolean
 }

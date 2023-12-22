@@ -1,18 +1,18 @@
-import DataTable from "react-data-table-component";
-import useDebounce from "../../hooks/useDebounce";
+import DataTable, { createTheme } from "react-data-table-component";
+import useDebounce from "../hooks/useDebounce";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Tableservice } from "../../service/tableDataService";
+import { Tableservice } from "./tableDataService";
 import { Circles } from "react-loader-spinner";
-import { IDataTableBase } from "../../database";
+import { IDataTableBase } from "../database";
 
 
 
-function DataTableBase(props:IDataTableBase): JSX.Element {
-    const {coloumn,url,category,getdata,filter}=props
+function DataTableBase(props: IDataTableBase): JSX.Element {
+    const { coloumn, url, category, getdata, filter, theme } = props
 
     const [data, setData] = useState([])
     const [filtereddata, setFiltereddata] = useState([])
-    const [page, setPage] = useState(1);
+    const [pages, setPages] = useState(1);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
     const [search, setSearch] = useState("");
@@ -27,7 +27,7 @@ function DataTableBase(props:IDataTableBase): JSX.Element {
         if (!debounceSearch) {
             setBeingSearched(false)
             setFiltereddata([])
-            Tableservice.getData({url, page, perPage, filter})
+            Tableservice.getData({ url, pages, perPage, filter })
                 .then((res: any) => {
                     setTableloader(false)
                     setTotalRows(res.data.total)
@@ -35,7 +35,7 @@ function DataTableBase(props:IDataTableBase): JSX.Element {
                 })
                 .catch((err: any) => console.log(err))
         } else {
-            Tableservice.getSearchedData({url, search:debounceSearch, page, perPage, filter}).then((res: any) => {
+            Tableservice.getSearchedData({ url, search: debounceSearch, pages, perPage, filter }).then((res: any) => {
                 setTableloader(false)
                 setTotalRows(res.data.total)
                 setBeingSearched(true)
@@ -43,14 +43,14 @@ function DataTableBase(props:IDataTableBase): JSX.Element {
             })
                 .catch((err: any) => console.log(err))
         }
-    }, [debounceSearch, page, perPage, filter, url])
+    }, [debounceSearch, pages, perPage, filter, url])
 
 
     //sorting functionality
     const handlesort = (column: any, sortDirection: any) => {
         const sortBy = column?.name.split(" ").join("").toLowerCase()
         const order = sortDirection
-        Tableservice.getData({url, page, perPage, filter, sortBy, order})
+        Tableservice.getData({ url, pages, perPage, filter, sortBy, order })
     }
 
     //getting data when selecting single or multiple row
@@ -63,29 +63,61 @@ function DataTableBase(props:IDataTableBase): JSX.Element {
         getdata(row.selectedRows)
     }
 
+    createTheme('custom', {
+        text: {
+            primary: '#268bd2',
+            secondary: '#2aa198',
+        },
+        background: {
+            default: '#002b36',
+        },
+        context: {
+            background: '#cb4b16',
+            text: '#FFFFFF',
+        },
+        divider: {
+            default: '#073642',
+        },
+        action: {
+            button: 'rgba(0,0,0,.54)',
+            hover: 'rgba(0,0,0,.08)',
+            disabled: 'rgba(0,0,0,.12)',
+        },
+    },);
+
+
+    const customstyles={
+        headCells: {
+            style: {
+                fontWeight:"bolder",
+                fontSize:"20px"
+            },
+        },
+    }
+    
+
+
     return (
         <DataTable
             columns={coloumn}
             data={beingSearched ? filtereddata : data}
+            customStyles={customstyles}
             pagination
-            dense
+            theme={theme ? "light" : "custom"}
             selectableRows
             paginationServer
             paginationTotalRows={totalRows}
             onChangeRowsPerPage={(row: any) => setPerPage(row)}
-            onChangePage={(page: any) => setPage(page)}
+            onChangePage={(page: any) => setPages(page)}
             fixedHeader
             fixedHeaderScrollHeight="430px"
             selectableRowsHighlight
             highlightOnHover
             subHeader
-            subHeaderComponent={<input type="text" placeholder="search here..." className="tablesearch" value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value) }} />}
-            actions={
-                <div>
-                    <button onClick={() => Tableservice.saveAsExcel(beingSearched ? filtereddata : data)}>Export to excel</button>
-                    <button onClick={() => Tableservice.checkfordata({data, filtereddata, category})}>Export to PDF</button>
-                </div>
-            }
+            subHeaderComponent={<div className="subheader"><input type="text" placeholder="search here..." className="search" value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value) }} /><div className="actionbutton">
+                <button onClick={() => Tableservice.saveAsExcel(beingSearched ? filtereddata : data)} className="button">Export to excel</button>
+                <button onClick={() => Tableservice.checkfordata({ data, filtereddata, category })} className="button">Export to PDF</button>
+            </div></div>}
             onSort={handlesort}
             sortServer
             onSelectedRowsChange={getrowdata}
