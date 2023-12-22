@@ -8,7 +8,7 @@ import { ChangePass } from "../component/changepass"
 import { FormValidationTry } from "../component/formvalidation"
 import { UserTable } from "../pages/userTable"
 import { Signup } from "../component/signup"
-import { CheckTable } from "../component/reacttablecomponent/page"
+import { CheckTable } from "../pages/page"
 
 
 

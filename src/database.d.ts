@@ -30,3 +30,18 @@ export interface IDataTableBase{
     filter:object,
     theme:boolean
 }
+
+export interface Props{
+    pages:number;
+    totalRows:number;
+    perPage:number;
+    changingpage:any
+}
+
+export interface ReactTableProps {
+    columns: any,
+    url: string,
+    filter: object,
+    category: string,
+    getdata:(arg:Array<object>)=>void,
+}

@@ -1,20 +1,16 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import { usePagination, useRowSelect, useSortBy, useTable } from "react-table"
-import { Tableservice } from "../../service/tableDataService"
-import TableCheckBox from "./input"
-import useDebounce from "../../hooks/useDebounce"
+import { Tableservice } from "./tableDataService"
+import TableCheckBox from "../component/reacttablecomponent/input"
+import useDebounce from "../hooks/useDebounce"
 import './table.css'
 import { Circles } from "react-loader-spinner"
+import { Pagination } from "../component/reacttablecomponent/pagination"
+import { ReactTableProps } from "../database"
 
-interface ReactTableProps {
-    columns: any,
-    url: string,
-    filter: object,
-    category: string
-}
 
-export const ReactTable = (props: ReactTableProps) => {
-    const { columns, url, filter, category } = props
+export const ReactTableService = (props: ReactTableProps): JSX.Element => {
+    const { columns, url, filter, category,getdata} = props
     const [data, setData] = useState([])
     const [filtereddata, setFiltereddata] = useState([])
     const [pages, setPages] = useState(1);
@@ -24,8 +20,8 @@ export const ReactTable = (props: ReactTableProps) => {
     const [beingSearched, setBeingSearched] = useState(false);
     const debounceSearch = useDebounce(search, 500)
     const [tableloader, setTableloader] = useState(false)
-    const [val, setVal] = useState(0)
 
+    //data to be fetched on page load and on search
     useEffect(() => {
         setTableloader(true)
         if (!debounceSearch) {
@@ -50,7 +46,7 @@ export const ReactTable = (props: ReactTableProps) => {
         }
     }, [debounceSearch, pages, perPage, filter, url])
 
-
+    //using react table and giving data to it 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, selectedFlatRows } = useTable(
         {
             columns,
@@ -77,13 +73,16 @@ export const ReactTable = (props: ReactTableProps) => {
         }
     );
 
-    const handlepagechange = (e: any) => {
-        if (e.key === "Enter") {
-            if (val <= Math.ceil(totalRows / perPage)) {
-                setPages(val)
-            }
-        }
+    //function to get page number from child(pagination component)
+    const changingpage=(val:number)=>{
+        setPages(val)
     }
+
+    //getting row selected and mapping thorough array of object and passing data to parent(page)
+    useEffect(()=>{
+        const selectedRowData=selectedFlatRows?.map(el=>el.original)
+        getdata(selectedRowData)
+    },[selectedFlatRows])
 
     return (
         <div className="main">
@@ -154,7 +153,7 @@ export const ReactTable = (props: ReactTableProps) => {
                             {
                                 rows.map(row => {
                                     prepareRow(row)
-                                    return <tr {...row.getRowProps()} onClick={() => { console.log(' row click ', row) }}>
+                                    return <tr {...row.getRowProps()}>
                                         {
                                             row.cells.map(cell => (
                                                 <td {...cell.getCellProps()}>
@@ -170,22 +169,7 @@ export const ReactTable = (props: ReactTableProps) => {
                 </div>
             }
             {
-                (data.length !== 0 || filtereddata.length !== 0) && <div className="paginationbutton">
-                    <div>
-                        <span>Showing page {pages} of {Math.ceil(totalRows / perPage)}</span>
-                    </div>
-                    <ul className="pagination pagination-md justify-content-end">
-                        <div className="goto">
-                            <span>Go to Page: </span>
-                            <input type="number" className="input" placeholder={String(pages)} onChange={(e) => setVal(Number(e.target.value))} onKeyDown={handlepagechange} />
-                        </div>
-                        <li className="page-item"><button className="page-link butts" disabled={pages === 1} onClick={() => setPages(1)}>&laquo;</button></li>
-                        <li className="page-item"><button className="page-link butts" disabled={pages === 1} onClick={() => setPages(pages - 1)}>&lsaquo;</button></li>
-                        <li className="page-item"><button className="page-link butts" disabled={pages === (Math.ceil(totalRows / perPage))} onClick={() => setPages(pages + 1)}>&rsaquo;</button></li>
-                        <li className="page-item"><button className="page-link butts" disabled={pages === (Math.ceil(totalRows / perPage))} onClick={() => setPages(Math.ceil(totalRows / perPage))}>&raquo;</button></li>
-
-                    </ul>
-                </div>
+                (data.length !== 0 || filtereddata.length !== 0) && <Pagination pages={pages} totalRows={totalRows} perPage={perPage} changingpage={changingpage}/>
             }
         </div>
     )
