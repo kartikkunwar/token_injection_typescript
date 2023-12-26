@@ -9,6 +9,7 @@ import { FormValidationTry } from "../component/formvalidation"
 import { UserTable } from "../pages/userTable"
 import { Signup } from "../component/signup"
 import { CheckTable } from "../pages/page"
+import { Client } from "../pages/client"
 
 
 
@@ -22,6 +23,7 @@ export const AllRoutes = () => {
             <Route path="/try" element={<FormValidationTry/>}/>
             <Route path="/table" element={<UserTable/>}/>
             <Route path="/reacttable" element={<CheckTable/>}/>
+            <Route path="/client" element={<Client/>}/>
             <Route element={<ProtectedRoute />}>
                 <Route path="/product" element={<Product />}/>
                 <Route path="/product/:id" element={<SingleProduct />}/>

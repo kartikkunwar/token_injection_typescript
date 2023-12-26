@@ -73,6 +73,16 @@ export const Tableservice = {
         }
     },
 
+    //api call for getting client side table functionality
+    clientData: async (url:string) => {
+        try {
+            const res = await axios.get(`${url}`)
+            return res
+        } catch (err) {
+            return err
+        }
+    },
+
     //api call for search functionality
     getSearchedData: async (args: Igetsearched) => {
         const { url, search, pages, perPage, filter } = args
