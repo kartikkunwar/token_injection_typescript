@@ -10,6 +10,7 @@ import { UserTable } from "../pages/userTable"
 import { Signup } from "../component/signup"
 import { CheckTable } from "../pages/page"
 import { Client } from "../pages/client"
+import Cab from "../pages/cab"
 
 
 
@@ -24,6 +25,7 @@ export const AllRoutes = () => {
             <Route path="/table" element={<UserTable/>}/>
             <Route path="/reacttable" element={<CheckTable/>}/>
             <Route path="/client" element={<Client/>}/>
+            <Route path="/cab" element={<Cab/>}/>
             <Route element={<ProtectedRoute />}>
                 <Route path="/product" element={<Product />}/>
                 <Route path="/product/:id" element={<SingleProduct />}/>

@@ -119,7 +119,7 @@ export const ClientTableService = (props: IClientTableProps): JSX.Element => {
                                     <tr {...el.getHeaderGroupProps()}>
                                         {
                                             el.headers.map((column: any) => (
-                                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                                <th {...column.getHeaderProps(column.getSortByToggleProps())} >
                                                     {column.render("Header")}
                                                     {column.isSorted ? (
                                                         column.isSortedDesc ? (

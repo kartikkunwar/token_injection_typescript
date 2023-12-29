@@ -3,7 +3,11 @@ import { ClientTableService } from "../service/clientSideTable"
 
 
 export const Client = () => {
-    const [reload, setReload] = useState(0)
+    const [clientState, setClientstate] = useState({
+        reload:0,
+        edit:[],
+        delete:[]
+    })
     const url = "https://dummyjson.com/users?limit=100"
     const category = "users"
 
@@ -62,13 +66,13 @@ export const Client = () => {
         columns,
         url,
         category,
-        key: reload,
+        key: clientState.reload,
         getdata: getitems
     }
     return (
         <div>
             <div className="nav">
-                <button className="button" onClick={() => setReload(Math.floor(Math.random() * 10))}>Reload</button>
+                <button className="button" onClick={() =>setClientstate((prevstate)=>({...prevstate,reload:Math.floor(Math.random() * 10)}))}>Reload</button>
             </div>
             <ClientTableService {...props} />
         </div>

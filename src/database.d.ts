@@ -44,4 +44,5 @@ export interface ReactTableProps {
     filter: object,
     category: string,
     getdata:(arg:Array<object>)=>void,
+    deleteItem:object
 }

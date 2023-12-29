@@ -103,5 +103,26 @@ export const Tableservice = {
         } else {
             Tableservice.saveAsPdf({ dataToPrint: data, category })
         }
+    },
+
+    //deleting table data
+    delete : async (...args:any) => {
+        const [url,page,perPage,filter,item]=args
+        const query={
+            params:{
+                limit:perPage,
+                skip:(page*perPage)-perPage,
+                // sortBy,
+                // order,
+                name:filter.name,
+                gender:filter.gender
+            }
+        }
+        try {
+            const res = await axios.get(`${url}`,query)
+            return res
+        } catch (err) {
+            console.log(err)
+        }
     }
 }
