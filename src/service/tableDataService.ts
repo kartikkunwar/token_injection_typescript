@@ -2,9 +2,18 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx"
-import { Icheckdata, Igetdata, Igetsearched, Table } from "../database";
+import {  Igetdata, Igetsearched } from "../database";
 
+interface Table{
+    dataToPrint:Array<object>,
+    category:string
+}
 
+interface Icheckdata{
+    data:object[],
+    filtereddata:object[],
+    category:string
+}
 
 
 export const Tableservice = {
@@ -54,12 +63,12 @@ export const Tableservice = {
 
     //api call for getting data per page
     getData: async (args: Igetdata) => {
-        const { url, pages, perPage, filter, sortBy, order } = args
+        const { url, pages, perPage, filter, sortName, order } = args
         const query = {
             params: {
                 limit: perPage,
                 skip: (pages * perPage) - perPage,
-                sortBy,
+                sortName,
                 order,
                 name: filter.name,
                 gender: filter.gender

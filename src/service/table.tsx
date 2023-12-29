@@ -83,7 +83,15 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
             })
         }
     );
-    // console.log(sortBy)
+    
+    //getting sortBy name and order
+    useEffect(()=>{
+        if(sortBy.length){
+            const sortName=sortBy[0].id.split(" ").join("").toLowerCase()
+            const order=sortBy[0].desc?"desc":"asc"
+            Tableservice.getData({ url, pages, perPage, filter, sortName, order })
+        }
+    },[sortBy])
 
     //function to get page number from child(pagination component)
     const changingpage=(val:number)=>{

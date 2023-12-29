@@ -48,9 +48,9 @@ function DataTableBase(props: IDataTableBase): JSX.Element {
 
     //sorting functionality
     const handlesort = (column: any, sortDirection: any) => {
-        const sortBy = column?.name.split(" ").join("").toLowerCase()
+        const sortName = column?.name.split(" ").join("").toLowerCase()
         const order = sortDirection
-        Tableservice.getData({ url, pages, perPage, filter, sortBy, order })
+        Tableservice.getData({ url, pages, perPage, filter, sortName, order })
     }
 
     //getting data when selecting single or multiple row
