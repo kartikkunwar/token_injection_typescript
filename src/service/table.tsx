@@ -10,7 +10,7 @@ import { ReactTableProps } from "../database"
 
 
 export const ReactTableService = (props: ReactTableProps): JSX.Element => {
-    const { columns, url, filter, category, getdata, deleteItem} = props
+    const { columns, url, filter, category, getdata} = props
     
     const [tableState, setTableState] = useState({
         pages: 1,
@@ -54,10 +54,15 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
             })
                 .catch((err: any) => console.log(err))
         }
-        if(Object.values(deleteItem).length){
-            Tableservice.delete(url,pages,perPage,filter,deleteItem)
+        
+    }, [debounceSearch, pages, perPage, filter, url])
+
+    //function to delete table row data
+    const deleteData=(data:object)=>{
+        if(Object.values(data).length){
+            Tableservice.delete(url,pages,perPage,filter,data)
         }
-    }, [debounceSearch, pages, perPage, filter, url, deleteItem])
+    }
 
     //using react table and giving data to it 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, selectedFlatRows,state:{sortBy}} = useTable(
@@ -175,9 +180,15 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
                                     prepareRow(row)
                                     return <tr {...row.getRowProps()}>
                                         {
-                                            row.cells.map(cell => (
+                                            row.cells.map((cell,ind) => (
                                                 <td {...cell.getCellProps()}>
                                                     {cell.render("Cell")}
+                                                    {
+                                                        ind===row.cells.length-1&&<div>
+                                                            <button onClick={()=>console.log(row.original)}>Edit</button>
+                                                            <button onClick={()=>deleteData(row.original)}>Delete</button>
+                                                        </div>
+                                                    }
                                                 </td>
                                             ))
                                         }

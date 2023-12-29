@@ -4,11 +4,7 @@ import "./page.css"
 
 
 export const CheckTable = () => {
-    const [clientState, setClientstate] = useState({
-        reload:0,
-        edit:[],
-        delete:[]
-    })
+   const [reload,setReload]=useState(0)
     const url = "https://dummyjson.com/users"
     const filter = { name: 'a', gender: 'M' };
     const category = "users"
@@ -42,14 +38,14 @@ export const CheckTable = () => {
         },
         {
             Header: "Action",
-            Cell: (tableProps: any) => {
-                return (
-                    <div>
-                        <button onClick={() => setClientstate((prevstate)=>({...prevstate,edit:tableProps.row.original}))}>Edit</button>
-                        <button onClick={() => setClientstate((prevstate)=>({...prevstate,delete:tableProps.row.original}))}>Delete</button>
-                    </div>
-                )
-            }
+            // Cell: (tableProps: any) => {
+            //     return (
+            //         <div>
+            //             <button onClick={() => setClientstate((prevstate)=>({...prevstate,edit:tableProps.row.original}))}>Edit</button>
+            //             <button onClick={() => setClientstate((prevstate)=>({...prevstate,delete:tableProps.row.original}))}>Delete</button>
+            //         </div>
+            //     )
+            // }
         }
     ], [])
 
@@ -62,14 +58,13 @@ export const CheckTable = () => {
         url,
         category,
         filter,
-        key: clientState.reload,
+        key: reload,
         getdata: getitems,
-        deleteItem:clientState.delete
     }
     return (
         <div>
             <div className="nav">
-                <button className="button" onClick={() => setClientstate((prevstate)=>({...prevstate,reload:Math.floor(Math.random() * 10)}))}>Reload</button>
+                <button className="button" onClick={() => setReload(Math.floor(Math.random() * 10))}>Reload</button>
             </div>
             <ReactTableService {...props} />
         </div>

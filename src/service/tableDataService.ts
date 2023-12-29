@@ -128,7 +128,7 @@ export const Tableservice = {
             }
         }
         try {
-            const res = await axios.get(`${url}`,query)
+            const res = await axios.delete(`${url}/delete/${item.id}`,query)
             return res
         } catch (err) {
             console.log(err)
