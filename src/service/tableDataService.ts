@@ -16,6 +16,19 @@ interface Icheckdata{
 }
 
 
+interface Idata{
+    url:string,
+    pageIndex:number,
+    pageSize:number,
+    filter:any,
+    sortName?:string,
+    order?:string
+}
+
+interface Isearched extends Idata{
+    search:string
+}
+
 export const Tableservice = {
     //function for exporting data as pdf file
     saveAsPdf: function (arg: Table): void {
@@ -82,6 +95,27 @@ export const Tableservice = {
         }
     },
 
+    //api call with inbulit pagination
+    getDatatest: async (args: Idata) => {
+        const { url, pageIndex, pageSize, filter, sortName, order } = args
+        const query = {
+            params: {
+                limit: pageSize,
+                skip: ((pageIndex+1) * pageSize) - pageSize,
+                sortName,
+                order,
+                name: filter.name,
+                gender: filter.gender
+            }
+        }
+        try {
+            const res = await axios.get(`${url}`, query)
+            return res
+        } catch (err) {
+            return err
+        }
+    },
+
     //api call for getting client side table functionality
     clientData: async (url:string) => {
         try {
@@ -97,6 +131,17 @@ export const Tableservice = {
         const { url, search, pages, perPage, filter } = args
         try {
             const res = await axios.get(`${url}/search?q=${search}&limit=${perPage}&skip=${(pages * perPage) - perPage}`, { params: filter })
+            return res
+        } catch (err) {
+            return err
+        }
+    },
+
+    //api call with inbulit pagination
+    getSearchedDatatest: async (args: Isearched) => {
+        const { url, search, pageIndex, pageSize, filter } = args
+        try {
+            const res = await axios.get(`${url}/search?q=${search}&limit=${pageSize}&skip=${ ((pageIndex+1) * pageSize) - pageSize}`, { params: filter })
             return res
         } catch (err) {
             return err

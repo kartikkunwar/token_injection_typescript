@@ -20,12 +20,6 @@ export interface IDataTableBase{
     theme:boolean
 }
 
-export interface Props{
-    pages:number;
-    totalRows:number;
-    perPage:number;
-    changingpage:any
-}
 
 export interface ReactTableProps {
     columns: any,

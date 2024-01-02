@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import { usePagination, useRowSelect, useSortBy, useTable } from "react-table"
+import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table"
 import { Tableservice } from "./tableDataService"
 import TableCheckBox from "../component/reacttablecomponent/input"
 import useDebounce from "../hooks/useDebounce"
@@ -10,66 +10,33 @@ import { ReactTableProps } from "../database"
 
 
 export const ReactTableService = (props: ReactTableProps): JSX.Element => {
-    const { columns, url, filter, category, getdata} = props
-    
+    const { columns, url, filter, category, getdata } = props
     const [tableState, setTableState] = useState({
-        pages: 1,
         totalRows: 0,
-        perPage: 10,
         search: "",
-        beingSearched: false,
         tableloader: false,
+        // beingSearched:false,
         data: [],
         filtereddata: [],
-      });
+    });
     const debounceSearch = useDebounce(tableState.search, 500)
 
-    const { pages, totalRows, perPage,  beingSearched, tableloader, data, filtereddata } = tableState; 
-
-    //data to be fetched on page load and on search
-    useEffect(() => {
-        setTableState((prevState) => ({ ...prevState, tableloader: true }));
-        if (!debounceSearch) {
-            setTableState((prevState) => ({ ...prevState, beingSearched: false, filtereddata: [] }));
-            Tableservice.getData({ url, pages, perPage, filter })
-                .then((res: any) => {
-                    setTableState((prevState) => ({
-                        ...prevState,
-                        tableloader: false,
-                        totalRows: res.data.total,
-                        data: res.data[Object.keys(res.data)[0]],
-                      }));
-                })
-                .catch((err: any) => console.log(err))
-        } else {
-            Tableservice.getSearchedData({ url, search: debounceSearch, pages, perPage, filter }).then((res: any) => {
-                setTableState((prevState) => ({
-                    ...prevState,
-                    data: [],
-                    tableloader: false,
-                    totalRows: res.data.total,
-                    beingSearched: true,
-                    filtereddata: res.data[Object.keys(res.data)[0]],
-                  }));
-            })
-                .catch((err: any) => console.log(err))
-        }
-        
-    }, [debounceSearch, pages, perPage, filter, url])
+    const { totalRows, tableloader, data, filtereddata } = tableState;
 
     //function to delete table row data
-    const deleteData=(data:object)=>{
-        if(Object.values(data).length){
-            Tableservice.delete(url,pages,perPage,filter,data)
-        }
+    const deleteData = (data: object) => {
+        // Tableservice.delete(url, pageIndex, pageSize, filter, data)
     }
 
     //using react table and giving data to it 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, selectedFlatRows,state:{sortBy}} = useTable(
+    const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page, canNextPage, canPreviousPage, previousPage, nextPage, gotoPage, pageCount, selectedFlatRows, setPageSize, state: { sortBy, pageIndex, pageSize } } = useTable(
         {
             columns,
-            data: beingSearched ? filtereddata : data,
+            data: filtereddata.length ? filtereddata : data,
+            initialState: { pageIndex: 0 },
             manualSortBy: true,
+            manualPagination: true,
+            pageCount: totalRows
         }, useSortBy, usePagination, useRowSelect,
         (hooks) => {
             hooks.visibleColumns.push((columns) => {
@@ -88,26 +55,54 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
             })
         }
     );
-    
-    //getting sortBy name and order
-    useEffect(()=>{
-        if(sortBy.length){
-            const sortName=sortBy[0].id.split(" ").join("").toLowerCase()
-            const order=sortBy[0].desc?"desc":"asc"
-            Tableservice.getData({ url, pages, perPage, filter, sortName, order })
+    //data to be fetched on page load and on search
+    useEffect(() => {
+        setTableState((prevState) => ({ ...prevState, tableloader: true }));
+        if (!debounceSearch) {
+            setTableState((prevState) => ({ ...prevState, beingSearched: false, filtereddata: [] }));
+            Tableservice.getDatatest({ url, pageIndex, pageSize, filter })
+                .then((res: any) => {
+                    setTableState((prevState) => ({
+                        ...prevState,
+                        tableloader: false,
+                        totalRows: Math.ceil(res.data.total / pageSize),
+                        data: res.data[Object.keys(res.data)[0]],
+                    }));
+                })
+                .catch((err: any) => console.log(err))
+        } else {
+            Tableservice.getSearchedDatatest({ url, search: debounceSearch, pageIndex, pageSize, filter }).then((res: any) => {
+                setTableState((prevState) => ({
+                    ...prevState,
+                    data: [],
+                    tableloader: false,
+                    totalRows: Math.ceil(res.data.total / pageSize),
+                    // beingSearched: true,
+                    filtereddata: res.data[Object.keys(res.data)[0]],
+                }));
+            })
+                .catch((err: any) => console.log(err))
         }
-    },[sortBy])
+        // if (Object.values(deleteitem).length) {
+        //     deleteData(deleteitem)
+        // }
 
-    //function to get page number from child(pagination component)
-    const changingpage=(val:number)=>{
-        setTableState((prevState) => ({ ...prevState, pages: val }));
-    }
+    }, [debounceSearch, pageIndex, pageSize, filter, url])
+
+    //getting sortBy name and order
+    useEffect(() => {
+        if (sortBy.length) {
+            const sortName = sortBy[0].id.split(" ").join("").toLowerCase()
+            const order = sortBy[0].desc ? "desc" : "asc"
+            Tableservice.getDatatest({ url, pageIndex, pageSize, filter, sortName, order })
+        }
+    }, [sortBy])
 
     //getting row selected and mapping thorough array of object and passing data to parent(page)
-    useEffect(()=>{
-        const selectedRowData=selectedFlatRows?.map(el=>el.original)
+    useEffect(() => {
+        const selectedRowData = selectedFlatRows?.map(el => el.original)
         getdata(selectedRowData)
-    },[selectedFlatRows])
+    }, [selectedFlatRows])
 
     return (
         <div className="main">
@@ -115,8 +110,8 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
                 <div>
                     <span>Rows per Page:</span>
                     <select
-                        value={perPage}
-                        onChange={(e) =>setTableState((prevState) => ({ ...prevState, perPage: Number(e.target.value) }))}
+                        value={pageSize}
+                        onChange={(e) => setPageSize(Number(e.target.value))}
                     >
                         {[10, 15, 20, 25, 30].map((pageSize) => (
                             <option key={pageSize} value={pageSize}>
@@ -126,10 +121,10 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
                     </select>
                 </div>
                 <div className="search">
-                    <input type="text" placeholder="search here..." value={tableState.search} onChange={(e: ChangeEvent<HTMLInputElement>) => {setTableState((prevState) => ({ ...prevState,  search: e.target.value }))}} />
+                    <input type="text" placeholder="search here..." value={tableState.search || ""} onChange={(e: ChangeEvent<HTMLInputElement>) => setTableState((prevstate) => ({ ...prevstate, search: e.target.value }))} />
                 </div>
                 <div>
-                    <button onClick={() => Tableservice.saveAsExcel(beingSearched ? filtereddata : data)} className="button">Export to excel</button>
+                    <button onClick={() => Tableservice.saveAsExcel(filtereddata.length ? filtereddata : data)} className="button">Export to excel</button>
                     <button onClick={() => Tableservice.checkfordata({ data, filtereddata, category })} className="button">Export to PDF</button>
                 </div>
             </div>
@@ -176,19 +171,13 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
                         </thead>
                         <tbody {...getTableBodyProps()}>
                             {
-                                rows.map(row => {
+                                page.map(row => {
                                     prepareRow(row)
                                     return <tr {...row.getRowProps()}>
                                         {
-                                            row.cells.map((cell,ind) => (
+                                            row.cells.map((cell, ind) => (
                                                 <td {...cell.getCellProps()}>
                                                     {cell.render("Cell")}
-                                                    {
-                                                        ind===row.cells.length-1&&<div>
-                                                            <button onClick={()=>console.log(row.original)}>Edit</button>
-                                                            <button onClick={()=>deleteData(row.original)}>Delete</button>
-                                                        </div>
-                                                    }
                                                 </td>
                                             ))
                                         }
@@ -200,7 +189,7 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
                 </div>
             }
             {
-                (data.length !== 0 || filtereddata.length !== 0) && <Pagination pages={pages} totalRows={totalRows} perPage={perPage} changingpage={changingpage}/>
+                (data.length !== 0 || filtereddata.length !== 0) && <Pagination page={pageIndex} total={pageCount} gotoPage={gotoPage} previousPage={previousPage} nextPage={nextPage} canNextPage={canNextPage} canPreviousPage={canPreviousPage} />
             }
         </div>
     )

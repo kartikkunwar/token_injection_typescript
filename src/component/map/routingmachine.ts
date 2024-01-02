@@ -13,11 +13,11 @@ const RoutingMachine=({timer}:IRoutingMachine)=>{
     //     iconUrl:"https://cdn-icons-png.flaticon.com/512/5591/5591266.png",
     //     iconSize:[40,41],
     // })
-    var routing:any;
     useEffect(()=>{
         var mark=L.marker([28.5703,77.3218]).addTo(map)
         // map.on("click",function(e){
-             routing=L.Routing.control({
+            
+             L.Routing.control({
                 waypoints:[
                     L.latLng(28.5703,77.3218),
                     L.latLng(28.6280,77.3649),
@@ -34,13 +34,13 @@ const RoutingMachine=({timer}:IRoutingMachine)=>{
                 fitSelectedRoutes:true,
                 showAlternatives:false
             }).on("routesfound",function(e){
-                e.routes[0].coordinates.forEach((c:any,i:number)=>{
+                e.routes[0].coordinates.forEach((c:any,i:number)=>{  
                     setTimeout(()=>{
                         mark.setLatLng([c.lat,c.lng])
                     },timer*i)
                 })
             })
-            routing.addTo(map)
+            .addTo(map)
         // })
     },[timer])
     return null

@@ -5,9 +5,14 @@ import "./page.css"
 
 export const CheckTable = () => {
    const [reload,setReload]=useState(0)
+   const [clientstate,setClientstate]=useState({
+    edit:[],
+    delete:[]
+   })
     const url = "https://dummyjson.com/users"
     const filter = { name: 'a', gender: 'M' };
     const category = "users"
+    var x:any=[]
 
     const columns = useMemo(() => [
         {
@@ -38,17 +43,18 @@ export const CheckTable = () => {
         },
         {
             Header: "Action",
-            // Cell: (tableProps: any) => {
-            //     return (
-            //         <div>
-            //             <button onClick={() => setClientstate((prevstate)=>({...prevstate,edit:tableProps.row.original}))}>Edit</button>
-            //             <button onClick={() => setClientstate((prevstate)=>({...prevstate,delete:tableProps.row.original}))}>Delete</button>
-            //         </div>
-            //     )
-            // }
+            Cell: (tableProps: any) => {
+                return (
+                    <div>
+                        <button onClick={() => setClientstate((prevstate)=>({...prevstate,edit:tableProps.row.original}))}>Edit</button>
+                        <button onClick={() =>setClientstate((prevstate)=>({...prevstate,delete:tableProps.row.original}))}>Delete</button>
+                    </div>
+                )
+            }
         }
     ], [])
-
+      
+   
     //getting selected items from data table
     const getitems = (items: any) => {
         // console.log(items)
@@ -59,6 +65,7 @@ export const CheckTable = () => {
         category,
         filter,
         key: reload,
+        deleteitem:clientstate.delete,
         getdata: getitems,
     }
     return (
