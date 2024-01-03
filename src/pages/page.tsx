@@ -11,8 +11,6 @@ export const CheckTable = () => {
    })
     const url = "https://dummyjson.com/users"
     const filter = { name: 'a', gender: 'M' };
-    const category = "users"
-    var x:any=[]
 
     const columns = useMemo(() => [
         {
@@ -62,7 +60,6 @@ export const CheckTable = () => {
     const props = {
         columns,
         url,
-        category,
         filter,
         key: reload,
         deleteitem:clientstate.delete,

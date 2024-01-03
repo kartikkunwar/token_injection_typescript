@@ -6,13 +6,13 @@ import {  Igetdata, Igetsearched } from "../database";
 
 interface Table{
     dataToPrint:Array<object>,
-    category:string
+    columns:any
 }
 
 interface Icheckdata{
     data:object[],
     filtereddata:object[],
-    category:string
+    columns:any
 }
 
 
@@ -32,26 +32,22 @@ interface Isearched extends Idata{
 export const Tableservice = {
     //function for exporting data as pdf file
     saveAsPdf: function (arg: Table): void {
-        const { dataToPrint, category } = arg;
+        const { dataToPrint,columns } = arg;
         if (dataToPrint.length) {
-            var col;
+            var col=[];
             var rows;
-            switch (category) {
-                case "users":
-                    col = [['Id', 'Image', 'Age', 'First Name', 'Last Name', 'Email']];
-                    rows = dataToPrint.map((el: any) => {
-                        return [el.id, el.image, el.age, el.firstName, el.lastName, el.email]
+                // col = columns.filter((el:any)=>el.Header!=="Action").map((el:any)=>el.Header)
+                var column = columns.reduce(function (array:any, element:any) {
+                    if (element.Header !== "Action") {
+                       array.push(element.Header);
+                    }
+                    return array;
+                 }, []);
+                 col.push(column)
+                rows = dataToPrint.map((el: any) => {
+                    return [el.id, el.image, el.age, el.firstName, el.lastName, el.email]
 
-                    })
-                    break;
-                case "products":
-                    col = [['Id', 'Image', 'Title', 'Brand', 'Category', 'Price']];
-                    rows = dataToPrint.map((el: any) => {
-                        return [el.id, el.thumbnail, el.title, el.brand, el.category, el.price]
-
-                    })
-                    break;
-            }
+                })
             const doc = new jsPDF({ orientation: 'landscape' });
 
             autoTable(doc, {
@@ -66,7 +62,6 @@ export const Tableservice = {
     //function for exporting data as excel file
     saveAsExcel: function (data: Array<object>): void {
         if (data.length) {
-            console.log("hi")
             var wb = XLSX.utils.book_new(),
                 ws = XLSX.utils.json_to_sheet(data);
             XLSX.utils.book_append_sheet(wb, ws, "DataSheet");
@@ -151,11 +146,11 @@ export const Tableservice = {
 
     //giving data to export as pdf on condition
     checkfordata: (args: Icheckdata) => {
-        const { data, filtereddata, category } = args
+        const { data, filtereddata,  columns } = args
         if (filtereddata.length) {
-            Tableservice.saveAsPdf({ dataToPrint: filtereddata, category })
+            Tableservice.saveAsPdf({ dataToPrint: filtereddata,columns })
         } else {
-            Tableservice.saveAsPdf({ dataToPrint: data, category })
+            Tableservice.saveAsPdf({ dataToPrint: data, columns })
         }
     },
 

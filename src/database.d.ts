@@ -12,7 +12,7 @@ export interface Igetsearched extends Igetdata{
 }
 
 export interface IDataTableBase{
-    coloumn:Array<object>,
+    columns:Array<object>,
     url:string,
     category:string,
     getdata:(arg:T)=>void,
@@ -25,6 +25,5 @@ export interface ReactTableProps {
     columns: any,
     url: string,
     filter: object,
-    category: string,
     getdata:(arg:Array<object>)=>void,
 }

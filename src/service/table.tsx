@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import { useFilters, useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table"
+import { usePagination, useRowSelect, useSortBy, useTable } from "react-table"
 import { Tableservice } from "./tableDataService"
 import TableCheckBox from "../component/reacttablecomponent/input"
 import useDebounce from "../hooks/useDebounce"
@@ -10,7 +10,7 @@ import { ReactTableProps } from "../database"
 
 
 export const ReactTableService = (props: ReactTableProps): JSX.Element => {
-    const { columns, url, filter, category, getdata } = props
+    const { columns, url, filter,  getdata } = props
     const [tableState, setTableState] = useState({
         totalRows: 0,
         search: "",
@@ -25,7 +25,10 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
 
     //function to delete table row data
     const deleteData = (data: object) => {
-        // Tableservice.delete(url, pageIndex, pageSize, filter, data)
+        if (Object.values(data).length) {
+            Tableservice.delete(url, pageIndex, pageSize, filter, data)
+        }
+        
     }
 
     //using react table and giving data to it 
@@ -83,10 +86,6 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
             })
                 .catch((err: any) => console.log(err))
         }
-        // if (Object.values(deleteitem).length) {
-        //     deleteData(deleteitem)
-        // }
-
     }, [debounceSearch, pageIndex, pageSize, filter, url])
 
     //getting sortBy name and order
@@ -125,7 +124,7 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
                 </div>
                 <div>
                     <button onClick={() => Tableservice.saveAsExcel(filtereddata.length ? filtereddata : data)} className="button">Export to excel</button>
-                    <button onClick={() => Tableservice.checkfordata({ data, filtereddata, category })} className="button">Export to PDF</button>
+                    <button onClick={() => Tableservice.checkfordata({ data, filtereddata,  columns })} className="button">Export to PDF</button>
                 </div>
             </div>
             {
@@ -178,6 +177,12 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
                                             row.cells.map((cell, ind) => (
                                                 <td {...cell.getCellProps()}>
                                                     {cell.render("Cell")}
+                                                    {
+                                                        row.cells.length===ind+1&&<div>
+                                                            <button >Edit</button>
+                                                            <button onClick={()=>deleteData(row.original)}>Delete</button>
+                                                        </div>
+                                                    }
                                                 </td>
                                             ))
                                         }

@@ -9,7 +9,7 @@ type DataRow = {
     year: string;
 };
 
-export const coloumn: TableColumn<DataRow>[] = [
+export const columns: TableColumn<DataRow>[] = [
     {
         name: 'Id',
         selector: (row: any) => row.id,
@@ -66,7 +66,7 @@ export const UserTable = () => {
     }
 
     const props = {
-        coloumn,
+        columns,
         url,
         category,
         filter,

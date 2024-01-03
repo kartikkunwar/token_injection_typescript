@@ -8,7 +8,7 @@ import { IDataTableBase } from "../database";
 
 
 function DataTableBase(props: IDataTableBase): JSX.Element {
-    const { coloumn, url, category, getdata, filter, theme } = props
+    const { columns, url,  getdata, filter, theme } = props
 
     const [data, setData] = useState([])
     const [filtereddata, setFiltereddata] = useState([])
@@ -99,7 +99,7 @@ function DataTableBase(props: IDataTableBase): JSX.Element {
 
     return (
         <DataTable
-            columns={coloumn}
+            columns={columns}
             data={beingSearched ? filtereddata : data}
             customStyles={customstyles}
             pagination
@@ -116,7 +116,7 @@ function DataTableBase(props: IDataTableBase): JSX.Element {
             subHeader
             subHeaderComponent={<div className="subheader"><input type="text" placeholder="search here..." className="search" value={search} onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearch(e.target.value) }} /><div className="actionbutton">
                 <button onClick={() => Tableservice.saveAsExcel(beingSearched ? filtereddata : data)} className="button">Export to excel</button>
-                <button onClick={() => Tableservice.checkfordata({ data, filtereddata, category })} className="button">Export to PDF</button>
+                <button onClick={() => Tableservice.checkfordata({ data, filtereddata, columns })} className="button">Export to PDF</button>
             </div></div>}
             onSort={handlesort}
             sortServer
