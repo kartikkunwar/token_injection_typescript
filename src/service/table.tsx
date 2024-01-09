@@ -58,6 +58,7 @@ export const ReactTableService = (props: ReactTableProps): JSX.Element => {
             })
         }
     );
+    
     //data to be fetched on page load and on search
     useEffect(() => {
         setTableState((prevState) => ({ ...prevState, tableloader: true }));

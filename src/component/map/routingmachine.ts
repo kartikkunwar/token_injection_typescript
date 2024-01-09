@@ -15,9 +15,10 @@ const RoutingMachine=({timer}:IRoutingMachine)=>{
     // })
     useEffect(()=>{
         var mark=L.marker([28.5703,77.3218]).addTo(map)
+        var m;
         // map.on("click",function(e){
             
-             L.Routing.control({
+             m=L.Routing.control({
                 waypoints:[
                     L.latLng(28.5703,77.3218),
                     L.latLng(28.6280,77.3649),
@@ -41,6 +42,10 @@ const RoutingMachine=({timer}:IRoutingMachine)=>{
                 })
             })
             .addTo(map)
+            // if(m){
+            //     map.removeControl(m)
+                
+            // }
         // })
     },[timer])
     return null
