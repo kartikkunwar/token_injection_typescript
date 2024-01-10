@@ -57,6 +57,17 @@
     user-select: none;
     pointer-events: none;
   }
+  datalist {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 12px;
+  }
+  option {
+    padding: 0;
+  }
+  
+  
 
   
  

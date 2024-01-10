@@ -3,123 +3,130 @@ import "./timerange.css"
 
 const TimeRange = () => {
     const [filled, setFilled] = useState(0);
-    const [marginLeft,setMarginLeft]=useState(0)
+    const [marginLeft, setMarginLeft] = useState(0)
     const [isrunning, setIsrunning] = useState(false)
-    const [progreswidth,setProgresswidth]=useState(0)
+    const [progreswidth, setProgresswidth] = useState(0)
     useEffect(() => {
-        const thumbwidth=15
-        const centerthumb=(thumbwidth/100)*filled*-1
+        const thumbwidth = 15
+        const centerthumb = (thumbwidth / 100) * filled * -1
+        // const percent=((filled/86400)*100).toFixed(2)
         setMarginLeft(centerthumb)
         setProgresswidth(filled)
-        if (filled < 100 && isrunning) {
-            setTimeout(() => setFilled(prev => prev += 1), 50)
+        let timer: any;
+        if (filled < 86400 && isrunning) {
+            timer = setTimeout(() => setFilled(prev => prev += 1), 50)
+        }
+
+        return () => {
+            clearTimeout(timer)
         }
     }, [filled, isrunning])
 
     const handleChange = (e: any) => {
-        // console.log(e.target.value)
+        setFilled(Number(e.target.value))
+        console.log(e.target.value)
     }
 
     const timearr = [
         {
             line: "|",
-            time: "12:00am"
+            time: "12pm"
         },
         {
             line: "|",
-            time: "1:00am"
+            time: "01am"
         },
         {
             line: "|",
-            time: "2:00am"
+            time: "02am"
         },
         {
             line: "|",
-            time: "3:00am"
+            time: "03am"
         },
         {
             line: "|",
-            time: "4:00am"
+            time: "04am"
         },
         {
             line: "|",
-            time: "5:00am"
+            time: "05am"
         },
         {
             line: "|",
-            time: "6:00am"
+            time: "06am"
         },
         {
             line: "|",
-            time: "7:00am"
+            time: "07am"
         },
         {
             line: "|",
-            time: "8:00am"
+            time: "08am"
         },
         {
             line: "|",
-            time: "9:00am"
+            time: "09am"
         },
         {
             line: "|",
-            time: "10:00am"
+            time: "10am"
         },
         {
             line: "|",
-            time: "11:00am"
+            time: "11am"
         },
         {
             line: "|",
-            time: "12:00pm"
+            time: "12am"
         },
         {
             line: "|",
-            time: "1:00pm"
+            time: "01pm"
         },
         {
             line: "|",
-            time: "2:00pm"
+            time: "02pm"
         },
         {
             line: "|",
-            time: "3:00pm"
+            time: "03pm"
         },
         {
             line: "|",
-            time: "4:00pm"
+            time: "04pm"
         },
         {
             line: "|",
-            time: "5:00pm"
+            time: "05pm"
         },
         {
             line: "|",
-            time: "6:00pm"
+            time: "06pm"
         },
         {
             line: "|",
-            time: "7:00pm"
+            time: "07pm"
         },
         {
             line: "|",
-            time: "8:00pm"
+            time: "08pm"
         },
         {
             line: "|",
-            time: "9:00pm"
+            time: "09pm"
         },
         {
             line: "|",
-            time: "10:00pm"
+            time: "10pm"
         },
         {
             line: "|",
-            time: "11:00pm"
+            time: "11pm"
         },
         {
             line: "|",
-            time: "12:00am"
+            time: "12am"
         },
     ]
 
@@ -133,17 +140,26 @@ const TimeRange = () => {
                 {/* <div style={{ height: "100%", width: `${filled}%`, backgroundColor: "blue", transition: "width 0.5s", borderRadius: "10px" }}></div> */}
                 {/* <span className="progresspercent">{filled}%</span> */}
             </div>
-            <div style={{ marginTop: "50px",position:"relative" }} className="slider-container">
-                <div  className='progress-bar-cover' style={{
-                    width:`${progreswidth}%`
+            <div style={{ marginTop: "50px", position: "relative" }} className="slider-container">
+                <div className='progress-bar-cover' style={{
+                    width: `${progreswidth}%`
                 }}></div>
                 <div className="thumb" style={{
-                    left:`${filled}%`,
-                    marginLeft:`${marginLeft}px`
+                    left: `${filled}%`,
+                    marginLeft: `${marginLeft}px`
                 }}></div>
-                <input type="range" value={filled} onChange={handleChange} className="range" />
+                <input type="range" value={filled} onChange={handleChange} className="range" list="try" />
             </div>
-            <div style={{ width: "100%", margin: "auto", display: "flex", justifyContent: "space-between", overflow: "hidden" }}>
+            <datalist id="try">
+                {
+                    timearr.map((el) => {
+                        return (
+                            <option value={el.time} label={el.time}></option>
+                        )
+                    })
+                }
+            </datalist>
+            {/* <div style={{ width: "100%", margin: "auto", display: "flex", justifyContent: "space-between", overflow: "hidden" }}>
                     {
                         timearr.map((el) => {
                             return (
@@ -154,7 +170,7 @@ const TimeRange = () => {
                             )
                         })
                     }
-            </div>
+            </div> */}
         </div>
     )
 }

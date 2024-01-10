@@ -179,7 +179,6 @@ export const ClientTableService = (props: IClientTableProps): JSX.Element => {
                         <li className="page-item"><button className="page-link butts" disabled={!canPreviousPage} onClick={() => previousPage()}>&lsaquo;</button></li>
                         <li className="page-item"><button className="page-link butts" disabled={!canNextPage} onClick={() => nextPage()}>&rsaquo;</button></li>
                         <li className="page-item"><button className="page-link butts" disabled={!canNextPage} onClick={() => gotoPage(pageCount - 1)}>&raquo;</button></li>
-
                     </ul>
                 </div>
             </div>
