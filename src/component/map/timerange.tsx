@@ -8,13 +8,13 @@ const TimeRange = () => {
     const [progreswidth, setProgresswidth] = useState(0)
     useEffect(() => {
         const thumbwidth = 15
-        const centerthumb = (thumbwidth / 100) * filled * -1
-        // const percent=((filled/86400)*100).toFixed(2)
+        const percent=Number(((filled/86400)*100).toFixed(2))
+        const centerthumb = (thumbwidth / 100) * percent * -1
         setMarginLeft(centerthumb)
-        setProgresswidth(filled)
+        setProgresswidth(percent)
         let timer: any;
         if (filled < 86400 && isrunning) {
-            timer = setTimeout(() => setFilled(prev => prev += 1), 50)
+            timer = setTimeout(() => setFilled(prev => prev += 1), 1)
         }
 
         return () => {
@@ -136,19 +136,19 @@ const TimeRange = () => {
                 <li className="page-item"><button className="page-link butts" onClick={() => setIsrunning(true)}>&#x23f8;</button></li>
                 <li className="page-item"><button className="page-link butts" onClick={() => setIsrunning(false)}>&#x23f9;</button></li>
             </ul>
-            <div className="progressbar">
-                {/* <div style={{ height: "100%", width: `${filled}%`, backgroundColor: "blue", transition: "width 0.5s", borderRadius: "10px" }}></div> */}
-                {/* <span className="progresspercent">{filled}%</span> */}
-            </div>
+            {/* <div className="progressbar">
+                <div style={{ height: "100%", width: `${filled}%`, backgroundColor: "blue", transition: "width 0.5s", borderRadius: "10px" }}></div>
+                <span className="progresspercent">{filled}%</span>
+            </div> */}
             <div style={{ marginTop: "50px", position: "relative" }} className="slider-container">
                 <div className='progress-bar-cover' style={{
                     width: `${progreswidth}%`
                 }}></div>
                 <div className="thumb" style={{
-                    left: `${filled}%`,
+                    left: `${Number(((filled/86400)*100).toFixed(2))}%`,
                     marginLeft: `${marginLeft}px`
                 }}></div>
-                <input type="range" value={filled} onChange={handleChange} className="range" list="try" />
+                <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" list="try" />
             </div>
             <datalist id="try">
                 {
