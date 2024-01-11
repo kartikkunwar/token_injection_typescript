@@ -25,6 +25,7 @@ export const Pagination = (props: Props) => {
         changingpage(e);
         setVal(e);
     }
+    
     const getPageNumbers = () => {
         const currentPage = pages;
         const totalPages = Math.ceil(totalRows / perPage);

@@ -3,6 +3,7 @@ import { ReactTableService } from "../service/table"
 import "./page.css"
 // import TableForm from "../component/tableform"
 import { Button, Form } from "react-bootstrap"
+import Select from 'react-select'
 
 
 export const CheckTable = () => {
@@ -72,9 +73,20 @@ export const CheckTable = () => {
         deleteitem: clientstate.delete,
         getdata: getitems,
     }
+
+    const options = [
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+      ]
+
+      const handletry=(e:any)=>{
+        console.log(e)
+      }
+      
     return (
         <div>
-            <div style={{width:"30%",margin:"auto"}}>
+            <div style={{ width: "30%", margin: "auto" }}>
                 <Form onSubmit={formsubmit}>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>Email address</Form.Label>
@@ -86,6 +98,7 @@ export const CheckTable = () => {
                     </Form.Group>
                     <Button type="submit" className="btn-dark">Submit</Button>
                 </Form>
+                <Select options={options} onChange={handletry}/>
             </div>
             <div className="nav">
                 <button className="button" onClick={() => setReload(Math.floor(Math.random() * 10))}>Reload</button>
