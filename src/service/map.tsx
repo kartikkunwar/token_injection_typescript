@@ -29,15 +29,12 @@ const MapCab = () => {
         console.log(error)
     }
 
-    var latlng: [number, number][] =[
-        [29.66534,29.64021],
-        [29.66535,29.63819],
-        [29.66376,29.63817],
-        [29.66372,29.63749],
-        [29.66352,29.63749],
-        [29.66352,29.63749],
-        [29.66353,29.63713],
-    ]
+    // var latlng: [number, number][] =[
+    //     [28.5703,77.3218],
+    //     [28.5804,77.3238],
+        
+    // ]
+    
 
     useEffect(() => {
         if (!("geolocation" in navigator)) {
@@ -66,6 +63,7 @@ const MapCab = () => {
                         <RoutingMachine/>
                     </FeatureGroup>
                 </MapContainer>
+                
             }
             <TimeRange timer={timer}/>
         </div>

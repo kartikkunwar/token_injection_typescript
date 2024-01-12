@@ -66,11 +66,10 @@ const RoutingMachine=()=>{
                 fitSelectedRoutes:true,
                 showAlternatives:false,
             }).on("routesfound",function(e){
-                console.log(e)
                 e.routes[0].coordinates.forEach((c:any,i:number)=>{  
                     setTimeout(()=>{
                         mark.setLatLng([c.lat,c.lng])
-                    },10000*i)
+                    },100*i)
                 })
             })
             .addTo(map)

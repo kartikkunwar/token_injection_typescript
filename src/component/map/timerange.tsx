@@ -44,11 +44,13 @@ const TimeRange = ({ timer }: IRoutingMachine) => {
     const [isrunning, setIsrunning] = useState(false)
     const [progreswidth, setProgresswidth] = useState(0)
 
-    const convertime = (hms:any) => {
-        const [hours, minutes, seconds] = hms.split(':');
-        const totalSeconds = (+hours) * 60 * 60 + (+minutes) * 60 + (+seconds);
-        return totalSeconds
-    }
+    //converting timestamp to seconds
+    // const convertime = (hms:any) => {
+    //     const [hours, minutes, seconds] = hms.split(':');
+    //     const totalSeconds = (+hours) * 60 * 60 + (+minutes) * 60 + (+seconds);
+    //     return totalSeconds
+    // }
+
     useEffect(() => {
         const thumbwidth = 15
         const percent = Number(((filled / 86400) * 100).toFixed(2))
@@ -60,10 +62,10 @@ const TimeRange = ({ timer }: IRoutingMachine) => {
             timer = timer * -1
         }
         if (filled < 86400 && isrunning) {
-            let matchtime = latlng.filter((el: any) => {
-                return convertime(el.timestamp) === filled
-            })
-            if(matchtime.length) 
+            // let matchtime = latlng.filter((el: any) => {
+            //     return convertime(el.timestamp) === filled
+            // })
+            // if(matchtime.length)
             timerRun = setTimeout(() => setFilled(prev => prev += 1), timer || 1000)
         }
 
@@ -72,6 +74,7 @@ const TimeRange = ({ timer }: IRoutingMachine) => {
         }
     }, [filled, isrunning, timer])
 
+    //getting seconds value from slider
     const handleChange = (e: any) => {
         setFilled(Number(e.target.value))
         console.log(e.target.value)
@@ -202,9 +205,9 @@ const TimeRange = ({ timer }: IRoutingMachine) => {
             </div>
             <datalist id="try">
                 {
-                    timearr.map((el) => {
+                    timearr.map((el,ind) => {
                         return (
-                            <option value={el.time} label={el.time}></option>
+                            <option key={ind} value={el.time} label={el.time}></option>
                         )
                     })
                 }
