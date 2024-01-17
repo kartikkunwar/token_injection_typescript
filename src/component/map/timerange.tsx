@@ -77,7 +77,6 @@ const TimeRange = ({ timer }: IRoutingMachine) => {
     //getting seconds value from slider
     const handleChange = (e: any) => {
         setFilled(Number(e.target.value))
-        console.log(e.target.value)
     }
 
     const timearr = [
@@ -201,9 +200,9 @@ const TimeRange = ({ timer }: IRoutingMachine) => {
                     left: `${Number(((filled / 86400) * 100).toFixed(2))}%`,
                     marginLeft: `${marginLeft}px`
                 }}></div>
-                <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" list="try" />
+                <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" list="listitems" />
             </div>
-            <datalist id="try">
+            <datalist id="listitems">
                 {
                     timearr.map((el,ind) => {
                         return (
