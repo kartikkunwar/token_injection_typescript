@@ -55,30 +55,12 @@ const Markers = ({ trial, timer }: any) => {
     ]
 
     var mark: any;
-
-    var timed=(c:any,i:number,x:any,y:any)=>{
-        if (data.lat !== 0 && data.lng !== 0 && y!==undefined) {
-            console.log("hi")
-            map.removeControl(y)
-        }
-        
-        setTimeout(() => {
-            line.addLatLng(c)
-            setData({ ...init, lat: c.lat, lng: c.lng })
-            mark.setLatLng(c)
-        }, x * i)
-    }
     
     useEffect(() => {
         if (timer < 1) {
             timer = timer * -1
         }
         mark = L.marker([data.lat, data.lng]).addTo(map)
-
-        trial.forEach((c: any, i: number) => {
-           timed(c,i,timer,mark)
-        })
-
 
         // if (data.lat == 0 && data.lng == 0) {
         //     trial.forEach((c: any, i: number) => {

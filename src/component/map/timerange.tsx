@@ -66,11 +66,11 @@ const TimeRange = ({ timer }: IRoutingMachine) => {
             //     return convertime(el.timestamp) === filled
             // })
             // if(matchtime.length)
-            timerRun = setTimeout(() => setFilled(prev => prev += 1), timer || 1000)
+            timerRun = setInterval(() => setFilled(prev => prev += 1), timer || 1000)
         }
 
         return () => {
-            clearTimeout(timerRun)
+            clearInterval(timerRun)
         }
     }, [filled, isrunning, timer])
 
