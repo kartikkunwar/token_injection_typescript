@@ -1,19 +1,18 @@
 .progressbar{
     width: 90%;
-    height: 25px;
+    height: 5px;
     margin: auto;
-    border-radius: 10px;
     background-color: white;
 }
-/* .progresspercent{
-    font-weight: 600;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    color: white;
-    text-shadow: -1px 0 #555, 0 1px #555, 1px 0 #555, 0 -1px #555;
-} */
+    /* .progresspercent{
+        font-weight: 600;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        color: white;
+        text-shadow: -1px 0 #555, 0 1px #555, 1px 0 #555, 0 -1px #555;
+    } */
 .timer{
     font-size: 11px;
 }
@@ -66,10 +65,3 @@
   option {
     padding: 0;
   }
-  
-  
-
-  
- 
-
-  
