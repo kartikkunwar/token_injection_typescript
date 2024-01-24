@@ -450,7 +450,6 @@ const sampleData = [
 const init = {
     lat: 0,
     lng: 0,
-    heading: 270
 }
 const CloneCabTracker: React.FC = () => {
     const [markerSpeed, setMarkerSpeed] = useState(500);
@@ -458,6 +457,8 @@ const CloneCabTracker: React.FC = () => {
     const [marginLeft, setMarginLeft] = useState(0)
     const [isrunning, setIsrunning] = useState(false)
     const [progreswidth, setProgresswidth] = useState(0)
+    const [starttimer, setStarttimer] = useState("00:00:00")
+    const [endtimer, setEndtimer] = useState("24:00:00")
     const positionref = useRef(init)
     const currentIndex = useRef<number>(0);
     const polylineRef = useRef<any>(null);
@@ -521,12 +522,26 @@ const CloneCabTracker: React.FC = () => {
         return totalSeconds
     }
 
+    const toHHMMSS = (secs: any) => {
+        var sec_num = parseInt(secs, 10)
+        var hours = Math.floor(sec_num / 3600)
+        var minutes = Math.floor(sec_num / 60) % 60
+        var seconds = sec_num % 60
+
+        return [hours, minutes, seconds]
+            .map(v => v < 10 ? "0" + v : v)
+            .filter((v, i) => v !== "00" || i > 0)
+            .join(":")
+    }
+
     useEffect(() => {
         const thumbwidth = 15
         const percent = Number(((filled / 86400) * 100).toFixed(2))
         const centerthumb = (thumbwidth / 100) * percent * -1
         setMarginLeft(centerthumb)
         setProgresswidth(percent)
+        setStarttimer(toHHMMSS(filled))
+        setEndtimer(toHHMMSS(86400 - filled))
         let timerRun: any;
         if (filled < 86400 && isrunning) {
             timerRun = setInterval(() => {
@@ -694,7 +709,7 @@ const CloneCabTracker: React.FC = () => {
             <div style={{ width: "10%", margin: "auto" }}>
                 <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ width: "100%" }} />
             </div>
-            <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '70vh' }}>
+            <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '85vh' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -708,21 +723,29 @@ const CloneCabTracker: React.FC = () => {
                 />
             </MapContainer>
             <div style={{ marginTop: "20px" }}>
-                <ul className="pagination pagination-md justify-content-center">
+                {/* <ul className="pagination pagination-md justify-content-center">
                     <li className="page-item"><button className="page-link butts" onClick={() => setIsrunning(true)}>&#x23f8;</button></li>
                     <li className="page-item"><button className="page-link butts" onClick={() => setIsrunning(false)}>&#x23f9;</button></li>
-                </ul>
-                <div style={{ marginTop: "20px", position: "relative" }} className="slider-container">
-                    <div className='progress-bar-cover' style={{
+                </ul> */}
+                <div style={{ marginTop: "20px", }} className="slider-container">
+                    {/* <div className='progress-bar-cover' style={{
                         width: `${progreswidth}%`
-                    }}></div>
-                    <div className="thumb" style={{
+                    }}></div> */}
+                    {/* <div className="thumb" style={{
                         left: `${Number(((filled / 86400) * 100).toFixed(2))}%`,
                         marginLeft: `${marginLeft}px`
-                    }}></div>
-                    <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" list="listitems" />
+                    }}></div> */}
+                    <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" />
+                    <div className='player'>
+                        <span style={{ float: "left" }}>{starttimer}</span>
+                        <div>
+                            <button onClick={() => setIsrunning(true)} className='playerbuttons'>&#x23f8;</button>
+                            <button onClick={() => setIsrunning(false)} className='playerbuttons'>&#x23f9;</button>
+                        </div>
+                        <span style={{ float: "right" }}>{endtimer}</span>
+                    </div>
                 </div>
-                <datalist id="listitems">
+                {/* <datalist id="listitems">
                     {
                         timearr.map((el, ind) => {
                             return (
@@ -730,7 +753,7 @@ const CloneCabTracker: React.FC = () => {
                             )
                         })
                     }
-                </datalist>
+                </datalist> */}
             </div>
         </div>
     );
