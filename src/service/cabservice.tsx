@@ -3,8 +3,13 @@ import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import "leaflet-rotatedmarker";
-import "./clonechat.css"
+import "./cabservice.css"
+import RoutingMachine from '../component/routingmachine';
 
+
+interface DataProp{
+    mapData:any;
+}
 // Sample data with latitude, longitude, and timestamp
 const sampleData = [
     {
@@ -451,7 +456,7 @@ const init = {
     lat: 0,
     lng: 0,
 }
-const CloneCabTracker: React.FC = () => {
+const CabTracker= ({mapData}:DataProp) => {
     const [markerSpeed, setMarkerSpeed] = useState(500);
     const [filled, setFilled] = useState(0);
     const [marginLeft, setMarginLeft] = useState(0)
@@ -705,10 +710,8 @@ const CloneCabTracker: React.FC = () => {
 
 
     return (
-        <div>
-            <div style={{ width: "10%", margin: "auto" }}>
-                <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ width: "100%" }} />
-            </div>
+        <>
+            <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ minWidth: "7%",float:"right" }} />
             <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '85vh' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -721,6 +724,7 @@ const CloneCabTracker: React.FC = () => {
                     icon={customicon}
                     rotationOrigin='center'
                 />
+                 {/* <RoutingMachine/> */}
             </MapContainer>
             <div style={{ marginTop: "20px" }}>
                 {/* <ul className="pagination pagination-md justify-content-center">
@@ -755,14 +759,14 @@ const CloneCabTracker: React.FC = () => {
                     }
                 </datalist> */}
             </div>
-        </div>
+        </>
     );
 };
 
 
 
 
-export default CloneCabTracker;
+export default CabTracker;
 
 
 
