@@ -943,7 +943,7 @@ const Cab = () => {
                     <option value="xyz">xyz</option>
                 </select>
             </span>
-            <CabTracker mapData={mapData}/>
+            <CabTracker sampleData={mapData}/>
         </>
     )
 }
