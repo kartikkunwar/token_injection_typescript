@@ -1,4 +1,4 @@
-import  { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -6,20 +6,21 @@ import "leaflet-rotatedmarker";
 import "./cabservice.css"
 
 
-interface DataProp{
-    sampleData:any;
+interface DataProp {
+    sampleData: any;
 }
 
 const init = {
     lat: 0,
     lng: 0,
 }
-const CabTracker= ({sampleData}:DataProp) => {
+const CabTracker = ({ sampleData }: DataProp) => {
     const [markerSpeed, setMarkerSpeed] = useState(500);
     const [filled, setFilled] = useState(0);
     // const [marginLeft, setMarginLeft] = useState(0)
     const [isrunning, setIsrunning] = useState(false)
     // const [progreswidth, setProgresswidth] = useState(0)
+    const [covered, setCovered] = useState(0)
     const [starttimer, setStarttimer] = useState("00:00:00")
     const [endtimer, setEndtimer] = useState("24:00:00")
     const positionref = useRef(init)
@@ -34,7 +35,7 @@ const CabTracker= ({sampleData}:DataProp) => {
         if (val < 0) {
             val = val * -1
         }
-        setMarkerSpeed(parseInt(val, 10)); 
+        setMarkerSpeed(parseInt(val, 10));
     };
 
     //converting timestamp to seconds
@@ -58,10 +59,23 @@ const CabTracker= ({sampleData}:DataProp) => {
     }
 
     //resetting data on data change
-    useEffect(()=>{
-        tryRef.current=[]
-        setFilled(0)
-    },[sampleData])
+    // useEffect(() => {
+    //     tryRef.current = []
+    //     positionref.current = init
+    //     setFilled(0)
+    // }, [sampleData])
+
+    const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+        const R = 6371; // Earth radius in kilometers
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // Distance in kilometers
+        return distance;
+    };
 
 
     //mapping route covered by the cab
@@ -76,21 +90,45 @@ const CabTracker= ({sampleData}:DataProp) => {
         let timerRun: any;
         if (filled < 86400 && isrunning) {
             timerRun = setInterval(() => {
-                for (let i = 0; i < sampleData.length; i++) {
-                    if (filled === convertime(sampleData[i].timestamp)) {
-                        tryRef.current.push(sampleData[i])
-                        positionref.current = sampleData[i]
+                // for (let i = 0; i < sampleData.length; i++) {
+                //     if (filled === convertime(sampleData[i].timestamp)) {
+                //         tryRef.current.push(sampleData[i])
+                //         positionref.current = sampleData[i]
+                //         if (polylineRef.current) {
+                //             // Update the polyline with the new position
+                //             polylineRef.current.addLatLng(sampleData[i])
+                //         }
+                //         if (markerRef.current) {
+                //             // Move the marker to the new position
+                //             // markerRef.current.setLatLng([sampleData[i].lat, sampleData[i].lng]);
+                //             markerRef.current.setRotationAngle(sampleData[i].heading)
+                //         }
+                //     }
+                // }
+                sampleData.forEach((el: any, ind: number,arr:any) => {
+                    var lat1
+                    var lon1
+                    var lat2
+                    var lon2
+                    if (ind < sampleData.length - 1) {
+                        var { lat: lat1, lng: lon1 } = arr[ind];
+                        var { lat: lat2, lng: lon2 } = arr[ind + 1];
+                    }
+                    if (filled === convertime(el.timestamp)) {
+                        setCovered(covered+haversineDistance(lat1, lon1, lat2, lon2));
+                        tryRef.current.push(el)
+                        positionref.current = el
                         if (polylineRef.current) {
                             // Update the polyline with the new position
-                            polylineRef.current.addLatLng(sampleData[i])
+                            polylineRef.current.addLatLng(el)
                         }
                         if (markerRef.current) {
                             // Move the marker to the new position
-                            // markerRef.current.setLatLng([sampleData[i].lat, sampleData[i].lng]);
-                            markerRef.current.setRotationAngle(sampleData[i].heading)
+                            // markerRef.current.setLatLng([el.lat, el.lng]);
+                            markerRef.current.setRotationAngle(el.heading)
                         }
                     }
-                }
+                })
                 setFilled(prev => prev += 1)
             }, markerSpeed || 1000)
         } else {
@@ -100,7 +138,7 @@ const CabTracker= ({sampleData}:DataProp) => {
         return () => {
             clearInterval(timerRun)
         }
-    }, [sampleData,filled, isrunning, markerSpeed])
+    }, [sampleData, filled, isrunning, markerSpeed])
 
     //getting seconds value from slider
     const handleChange = (e: any) => {
@@ -228,6 +266,7 @@ const CabTracker= ({sampleData}:DataProp) => {
         },
     ]
 
+
     //icon used for marker
     const customicon = L.icon({
         iconUrl: "https://static.vecteezy.com/system/resources/thumbnails/001/193/877/small_2x/sport-car.png",
@@ -238,7 +277,8 @@ const CabTracker= ({sampleData}:DataProp) => {
 
     return (
         <>
-            <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ minWidth: "7%",float:"right" }} />
+            <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ minWidth: "7%", float: "right" }} />
+            <span>{covered.toFixed(2)}</span>
             <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '85vh' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -265,7 +305,16 @@ const CabTracker= ({sampleData}:DataProp) => {
                         left: `${Number(((filled / 86400) * 100).toFixed(2))}%`,
                         marginLeft: `${marginLeft}px`
                     }}></div> */}
-                    <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" />
+                    <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" list='listitems' />
+                    <datalist id="listitems">
+                        {
+                            timearr.map((el, ind) => {
+                                return (
+                                    <option key={ind} value={el.time} label={el.time}></option>
+                                )
+                            })
+                        }
+                    </datalist>
                     <div className='player'>
                         <span style={{ float: "left" }}>{starttimer}</span>
                         <div>
@@ -275,15 +324,7 @@ const CabTracker= ({sampleData}:DataProp) => {
                         <span style={{ float: "right" }}>{endtimer}</span>
                     </div>
                 </div>
-                {/* <datalist id="listitems">
-                    {
-                        timearr.map((el, ind) => {
-                            return (
-                                <option key={ind} value={el.time} label={el.time}></option>
-                            )
-                        })
-                    }
-                </datalist> */}
+
             </div>
         </>
     );
