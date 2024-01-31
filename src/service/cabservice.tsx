@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Polyline, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import "leaflet-rotatedmarker";
@@ -8,21 +8,21 @@ import "./cabservice.css"
 
 interface DataProp {
     sampleData: any;
+    name: string
 }
 
 const init = {
     lat: 0,
     lng: 0,
 }
-const CabTracker = ({ sampleData }: DataProp) => {
+const CabTracker = ({ sampleData, name }: DataProp) => {
     const [markerSpeed, setMarkerSpeed] = useState(500);
     const [filled, setFilled] = useState(0);
-    // const [marginLeft, setMarginLeft] = useState(0)
     const [isrunning, setIsrunning] = useState(false)
-    // const [progreswidth, setProgresswidth] = useState(0)
     const [covered, setCovered] = useState(0)
     const [starttimer, setStarttimer] = useState("00:00:00")
-    const [endtimer, setEndtimer] = useState("24:00:00")
+    const [marginLeft, setMarginLeft] = useState(0)
+    const [progreswidth, setProgresswidth] = useState(0)
     const positionref = useRef(init)
     const currentIndex = useRef<number>(0);
     const polylineRef = useRef<any>(null);
@@ -58,13 +58,7 @@ const CabTracker = ({ sampleData }: DataProp) => {
             .join(":")
     }
 
-    //resetting data on data change
-    // useEffect(() => {
-    //     tryRef.current = []
-    //     positionref.current = init
-    //     setFilled(0)
-    // }, [sampleData])
-
+    //calculating distance travelled 
     const haversineDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
         const R = 6371; // Earth radius in kilometers
         const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -80,42 +74,22 @@ const CabTracker = ({ sampleData }: DataProp) => {
 
     //mapping route covered by the cab
     useEffect(() => {
-        // const thumbwidth = 15
-        // const percent = Number(((filled / 86400) * 100).toFixed(2))
-        // const centerthumb = (thumbwidth / 100) * percent * -1
-        // setMarginLeft(centerthumb)
-        // setProgresswidth(percent)
+        const thumbwidth = 15
+        const percent = Number(((filled / 86400) * 100).toFixed(2))
+        const centerthumb = (thumbwidth / 100) * percent * -1
+        setMarginLeft(centerthumb)
+        setProgresswidth(percent)
         setStarttimer(toHHMMSS(filled))
-        setEndtimer(toHHMMSS(86400 - filled))
         let timerRun: any;
         if (filled < 86400 && isrunning) {
             timerRun = setInterval(() => {
-                // for (let i = 0; i < sampleData.length; i++) {
-                //     if (filled === convertime(sampleData[i].timestamp)) {
-                //         tryRef.current.push(sampleData[i])
-                //         positionref.current = sampleData[i]
-                //         if (polylineRef.current) {
-                //             // Update the polyline with the new position
-                //             polylineRef.current.addLatLng(sampleData[i])
-                //         }
-                //         if (markerRef.current) {
-                //             // Move the marker to the new position
-                //             // markerRef.current.setLatLng([sampleData[i].lat, sampleData[i].lng]);
-                //             markerRef.current.setRotationAngle(sampleData[i].heading)
-                //         }
-                //     }
-                // }
-                sampleData.forEach((el: any, ind: number,arr:any) => {
-                    var lat1
-                    var lon1
-                    var lat2
-                    var lon2
-                    if (ind < sampleData.length - 1) {
-                        var { lat: lat1, lng: lon1 } = arr[ind];
-                        var { lat: lat2, lng: lon2 } = arr[ind + 1];
-                    }
+                sampleData.forEach((el: any, ind: number, arr: any) => {
                     if (filled === convertime(el.timestamp)) {
-                        setCovered(covered+haversineDistance(lat1, lon1, lat2, lon2));
+                        if (ind < sampleData.length - 1) {
+                            var { lat: lat1, lng: lon1 } = arr[ind];
+                            var { lat: lat2, lng: lon2 } = arr[ind + 1];
+                            setCovered(covered + haversineDistance(lat1, lon1, lat2, lon2));
+                        }
                         tryRef.current.push(el)
                         positionref.current = el
                         if (polylineRef.current) {
@@ -123,8 +97,7 @@ const CabTracker = ({ sampleData }: DataProp) => {
                             polylineRef.current.addLatLng(el)
                         }
                         if (markerRef.current) {
-                            // Move the marker to the new position
-                            // markerRef.current.setLatLng([el.lat, el.lng]);
+                            // update vehicle direction
                             markerRef.current.setRotationAngle(el.heading)
                         }
                     }
@@ -142,11 +115,18 @@ const CabTracker = ({ sampleData }: DataProp) => {
 
     //getting seconds value from slider
     const handleChange = (e: any) => {
+        var currentdistance = 0;
         setFilled(Number(e.target.value))
         currentIndex.current = Number(e.target.value)
         tryRef.current = []
         for (let i = 0; i < sampleData.length; i++) {
+            if (i < sampleData.length - 1) {
+                var { lat: lat1, lng: lon1 } = sampleData[i];
+                var { lat: lat2, lng: lon2 } = sampleData[i + 1];
+            }
             if (currentIndex.current > convertime(sampleData[i].timestamp)) {
+                currentdistance += haversineDistance(lat1, lon1, lat2, lon2);
+                setCovered(currentdistance)
                 tryRef.current.push(sampleData[i])
                 positionref.current = sampleData[i]
                 if (polylineRef.current) {
@@ -157,6 +137,8 @@ const CabTracker = ({ sampleData }: DataProp) => {
                     // Move the marker to the new position
                     markerRef.current.setRotationAngle(sampleData[i].heading)
                 }
+            } else if (currentIndex.current === 0) {
+                setCovered(0)
             } else {
                 return;
             }
@@ -266,6 +248,61 @@ const CabTracker = ({ sampleData }: DataProp) => {
         },
     ]
 
+    const timearrsmaller = [
+        {
+            line: "|",
+            time: "12pm"
+        },
+        {
+            line: "|",
+            time: "02am"
+        },
+        {
+            line: "|",
+            time: "04am"
+        },
+        {
+            line: "|",
+            time: "06am"
+        },
+        {
+            line: "|",
+            time: "08am"
+        },
+        {
+            line: "|",
+            time: "10am"
+        },
+        {
+            line: "|",
+            time: "12am"
+        },
+        {
+            line: "|",
+            time: "02pm"
+        },
+        {
+            line: "|",
+            time: "04pm"
+        },
+        {
+            line: "|",
+            time: "06pm"
+        },
+        {
+            line: "|",
+            time: "08pm"
+        },
+        {
+            line: "|",
+            time: "10pm"
+        },
+        {
+            line: "|",
+            time: "12am"
+        },
+    ]
+
 
     //icon used for marker
     const customicon = L.icon({
@@ -274,12 +311,19 @@ const CabTracker = ({ sampleData }: DataProp) => {
     })
     L.Marker.prototype.options.icon = customicon
 
-
     return (
         <>
-            <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ minWidth: "7%", float: "right" }} />
-            <span>{covered.toFixed(2)}</span>
-            <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '85vh' }}>
+            <span style={{marginLeft:"10%"}}><input type="date" /></span>
+            <span><img src="https://p7.hiclipart.com/preview/208/807/684/snail-mail-innovation-clip-art-snails.jpg" alt="runner" className='runner' /></span>
+            <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ minWidth: "7%", float: "right" }} className='speed' />
+            <span><img src="https://cdn-icons-png.flaticon.com/512/55/55240.png" alt="runner" className='runner' /></span>
+            <div className='player'>
+                <div>
+                    <button onClick={() => setIsrunning(true)} className='playerbuttons'>&#x23f8;</button>
+                    <button onClick={() => setIsrunning(false)} className='playerbuttons'>&#x23f9;</button>
+                </div>
+            </div>
+            <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '83vh',zIndex:"1" }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -290,41 +334,71 @@ const CabTracker = ({ sampleData }: DataProp) => {
                     ref={markerRef}
                     icon={customicon}
                     rotationOrigin='center'
-                />
+                    eventHandlers={{
+                        mouseover: (event) => event.target.openPopup(),
+                    }}
+                >
+                    <Popup className='popup'>
+                        <div>
+                            <div className='popupcontent'>
+                                <span>Number</span><span>UP16BV8110</span>
+                            </div>
+                            <div className='popupcontent'>
+                                <span>Speed</span><span>{`86 km/hr`}</span>
+                            </div>
+                            <div className='popupcontent'>
+                                <span>Date</span><span>{`${starttimer}`}</span>
+                            </div>
+                        </div>
+                    </Popup>
+                </Marker>
             </MapContainer>
-            <div style={{ marginTop: "20px" }}>
-                {/* <ul className="pagination pagination-md justify-content-center">
-                    <li className="page-item"><button className="page-link butts" onClick={() => setIsrunning(true)}>&#x23f8;</button></li>
-                    <li className="page-item"><button className="page-link butts" onClick={() => setIsrunning(false)}>&#x23f9;</button></li>
-                </ul> */}
-                <div style={{ marginTop: "20px", }} className="slider-container">
-                    {/* <div className='progress-bar-cover' style={{
+            <div >
+                <div style={{ width: "100%", margin: "auto", display: "flex", justifyContent: "space-evenly" }}>
+                    <span className='cabdata'>{`Vehicle Number - UP16BV8110`}</span>
+                    <span className='cabdata'>{`Showing for- ${name}`}</span>
+                    <span className='cabdata'>{`Distance travelled: ${covered.toFixed(2)} km`}</span>
+                    <div>
+                        <button onClick={() => setIsrunning(true)} className='playerbuttons'>&#x23f8;</button>
+                        <button onClick={() => setIsrunning(false)} className='playerbuttons'>&#x23f9;</button>
+                    </div>
+                </div>
+                <div className="slider-container">
+                    <div className='progress-bar-cover' style={{
                         width: `${progreswidth}%`
-                    }}></div> */}
-                    {/* <div className="thumb" style={{
+                    }}></div>
+                    <div className="thumb" style={{
                         left: `${Number(((filled / 86400) * 100).toFixed(2))}%`,
                         marginLeft: `${marginLeft}px`
-                    }}></div> */}
+                    }}></div>
+                    <span className='timer' style={{
+                        left: `${Number(((filled / 86400) * 100 - 1).toFixed(2))}%`,
+                        marginLeft: `${marginLeft}px`
+                    }}>{starttimer}</span>
                     <input type="range" min='0' max='86400' value={filled} onChange={handleChange} className="range" list='listitems' />
                     <datalist id="listitems">
                         {
                             timearr.map((el, ind) => {
                                 return (
-                                    <option key={ind} value={el.time} label={el.time}></option>
+                                    <option key={ind} value={el.time} label={el.time} className='tick'></option>
                                 )
                             })
                         }
                     </datalist>
-                    <div className='player'>
-                        <span style={{ float: "left" }}>{starttimer}</span>
-                        <div>
-                            <button onClick={() => setIsrunning(true)} className='playerbuttons'>&#x23f8;</button>
-                            <button onClick={() => setIsrunning(false)} className='playerbuttons'>&#x23f9;</button>
-                        </div>
-                        <span style={{ float: "right" }}>{endtimer}</span>
-                    </div>
                 </div>
-
+            </div>
+            <div className='sidebar'>
+                <div>
+                    <button className='tab'>{`Vehicles(22)`}</button>
+                    <button className='tab'>{`Assets(5)`}</button>
+                    <button className='tab'>&#x23f4;</button>
+                </div>
+                <div>
+                    <input type="text" placeholder='search vehicle here'/>
+                </div>
+                <div>
+                    
+                </div>
             </div>
         </>
     );
