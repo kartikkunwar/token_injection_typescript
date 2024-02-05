@@ -5,6 +5,78 @@ import 'leaflet/dist/leaflet.css';
 import "leaflet-rotatedmarker";
 import "./cabservice.css"
 
+const fakedata=[
+    {
+      "vehicle number": "ABC123",
+      "latitude": "37.7749",
+      "longitude": "-122.4194",
+      "type": "car",
+      "driver name": "John Doe"
+    },
+    {
+      "vehicle number": "DEF456",
+      "latitude": "34.0522",
+      "longitude": "-118.2437",
+      "type": "truck",
+      "driver name": "Jane Smith"
+    },
+    {
+      "vehicle number": "GHI789",
+      "latitude": "40.7128",
+      "longitude": "-74.0060",
+      "type": "motorcycle",
+      "driver name": "Mike Johnson"
+    },
+    {
+      "vehicle number": "JKL012",
+      "latitude": "51.5074",
+      "longitude": "-0.1278",
+      "type": "car",
+      "driver name": "Emily Davis"
+    },
+    {
+      "vehicle number": "MNO345",
+      "latitude": "48.8566",
+      "longitude": "2.3522",
+      "type": "bus",
+      "driver name": "David Wilson"
+    },
+    {
+      "vehicle number": "PQR678",
+      "latitude": "41.8781",
+      "longitude": "-87.6298",
+      "type": "car",
+      "driver name": "Sarah Thompson"
+    },
+    {
+      "vehicle number": "STU901",
+      "latitude": "35.6895",
+      "longitude": "139.6917",
+      "type": "truck",
+      "driver name": "Michael Brown"
+    },
+    {
+      "vehicle number": "VWX234",
+      "latitude": "55.7558",
+      "longitude": "37.6176",
+      "type": "motorcycle",
+      "driver name": "Emma Johnson"
+    },
+    {
+      "vehicle number": "YZA567",
+      "latitude": "45.4215",
+      "longitude": "-75.6981",
+      "type": "car",
+      "driver name": "Daniel Martin"
+    },
+    {
+      "vehicle number": "BCD890",
+      "latitude": "49.2827",
+      "longitude": "-123.1207",
+      "type": "bus",
+      "driver name": "Olivia Wilson"
+    }
+  ]
 
 interface DataProp {
     sampleData: any;
@@ -310,7 +382,7 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
         iconSize: [30, 50],
     })
     L.Marker.prototype.options.icon = customicon
-
+    
     return (
         <>
             <span style={{marginLeft:"10%"}}><input type="date" /></span>
@@ -397,7 +469,18 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
                     <input type="text" placeholder='search vehicle here'/>
                 </div>
                 <div>
-                    
+                    {
+                        fakedata.map((el:any,ind:number)=>{
+                            return(
+                                <div>
+                                    <div><span>{ind}</span><span>{el.type}</span></div>
+                                    <div>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
                 </div>
             </div>
         </>
