@@ -122,8 +122,23 @@ option {
   position: absolute;
   top: 10%;
   z-index: 4;
-  border: 1px solid black;
   background-color: white;
+  width: 200px;
+  padding: 20px;
+  cursor: pointer;
+}
+.sidebar>div:nth-child(1){
+  display: flex;
+  justify-content: space-between;
+}
+.subsidebar{
+  position:absolute;
+  top: 10%;
+  left: 200px;
+  z-index: 4;
+  width: 200px;
+  background-color: white;
+  padding: 20px;
 }
 .tab{
   border: none;

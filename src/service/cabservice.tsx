@@ -5,78 +5,78 @@ import 'leaflet/dist/leaflet.css';
 import "leaflet-rotatedmarker";
 import "./cabservice.css"
 
-const fakedata=[
+const fakedata = [
     {
-      "vehicle number": "ABC123",
-      "latitude": "37.7749",
-      "longitude": "-122.4194",
-      "type": "car",
-      "driver name": "John Doe"
+        "vehicle number": "ABC123",
+        "latitude": "37.7749",
+        "longitude": "-122.4194",
+        "type": "car",
+        "driver name": "John Doe"
     },
     {
-      "vehicle number": "DEF456",
-      "latitude": "34.0522",
-      "longitude": "-118.2437",
-      "type": "truck",
-      "driver name": "Jane Smith"
+        "vehicle number": "DEF456",
+        "latitude": "34.0522",
+        "longitude": "-118.2437",
+        "type": "truck",
+        "driver name": "Jane Smith"
     },
     {
-      "vehicle number": "GHI789",
-      "latitude": "40.7128",
-      "longitude": "-74.0060",
-      "type": "motorcycle",
-      "driver name": "Mike Johnson"
+        "vehicle number": "GHI789",
+        "latitude": "40.7128",
+        "longitude": "-74.0060",
+        "type": "motorcycle",
+        "driver name": "Mike Johnson"
     },
     {
-      "vehicle number": "JKL012",
-      "latitude": "51.5074",
-      "longitude": "-0.1278",
-      "type": "car",
-      "driver name": "Emily Davis"
+        "vehicle number": "JKL012",
+        "latitude": "51.5074",
+        "longitude": "-0.1278",
+        "type": "car",
+        "driver name": "Emily Davis"
     },
     {
-      "vehicle number": "MNO345",
-      "latitude": "48.8566",
-      "longitude": "2.3522",
-      "type": "bus",
-      "driver name": "David Wilson"
+        "vehicle number": "MNO345",
+        "latitude": "48.8566",
+        "longitude": "2.3522",
+        "type": "bus",
+        "driver name": "David Wilson"
     },
     {
-      "vehicle number": "PQR678",
-      "latitude": "41.8781",
-      "longitude": "-87.6298",
-      "type": "car",
-      "driver name": "Sarah Thompson"
+        "vehicle number": "PQR678",
+        "latitude": "41.8781",
+        "longitude": "-87.6298",
+        "type": "car",
+        "driver name": "Sarah Thompson"
     },
     {
-      "vehicle number": "STU901",
-      "latitude": "35.6895",
-      "longitude": "139.6917",
-      "type": "truck",
-      "driver name": "Michael Brown"
+        "vehicle number": "STU901",
+        "latitude": "35.6895",
+        "longitude": "139.6917",
+        "type": "truck",
+        "driver name": "Michael Brown"
     },
     {
-      "vehicle number": "VWX234",
-      "latitude": "55.7558",
-      "longitude": "37.6176",
-      "type": "motorcycle",
-      "driver name": "Emma Johnson"
+        "vehicle number": "VWX234",
+        "latitude": "55.7558",
+        "longitude": "37.6176",
+        "type": "motorcycle",
+        "driver name": "Emma Johnson"
     },
     {
-      "vehicle number": "YZA567",
-      "latitude": "45.4215",
-      "longitude": "-75.6981",
-      "type": "car",
-      "driver name": "Daniel Martin"
+        "vehicle number": "YZA567",
+        "latitude": "45.4215",
+        "longitude": "-75.6981",
+        "type": "car",
+        "driver name": "Daniel Martin"
     },
     {
-      "vehicle number": "BCD890",
-      "latitude": "49.2827",
-      "longitude": "-123.1207",
-      "type": "bus",
-      "driver name": "Olivia Wilson"
+        "vehicle number": "BCD890",
+        "latitude": "49.2827",
+        "longitude": "-123.1207",
+        "type": "bus",
+        "driver name": "Olivia Wilson"
     }
-  ]
+]
 
 interface DataProp {
     sampleData: any;
@@ -91,6 +91,8 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
     const [markerSpeed, setMarkerSpeed] = useState(500);
     const [filled, setFilled] = useState(0);
     const [isrunning, setIsrunning] = useState(false)
+    const [showMenu, setShowMenu] = useState(true)
+    const [showSubMenu, setShowSubMenu] = useState(false)
     const [covered, setCovered] = useState(0)
     const [starttimer, setStarttimer] = useState("00:00:00")
     const [marginLeft, setMarginLeft] = useState(0)
@@ -175,7 +177,7 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
                     }
                 })
                 setFilled(prev => prev += 1)
-            }, markerSpeed || 1000)
+            }, markerSpeed)
         } else {
             clearInterval(timerRun)
         }
@@ -217,6 +219,7 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
         }
     }
 
+    //dummy data for time 
     const timearr = [
         {
             line: "|",
@@ -382,10 +385,10 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
         iconSize: [30, 50],
     })
     L.Marker.prototype.options.icon = customicon
-    
+
     return (
         <>
-            <span style={{marginLeft:"10%"}}><input type="date" /></span>
+            <span style={{ marginLeft: "10%" }}><input type="date" /></span>
             <span><img src="https://p7.hiclipart.com/preview/208/807/684/snail-mail-innovation-clip-art-snails.jpg" alt="runner" className='runner' /></span>
             <input type="range" min='1' max='1000' value={markerSpeed} id="range" onChange={handleSpeedChange} style={{ minWidth: "7%", float: "right" }} className='speed' />
             <span><img src="https://cdn-icons-png.flaticon.com/512/55/55240.png" alt="runner" className='runner' /></span>
@@ -395,7 +398,7 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
                     <button onClick={() => setIsrunning(false)} className='playerbuttons'>&#x23f9;</button>
                 </div>
             </div>
-            <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '83vh',zIndex:"1" }}>
+            <MapContainer center={[28.57045, 77.32162]} zoom={14} style={{ height: '83vh', zIndex: "1" }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -459,20 +462,38 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
                     </datalist>
                 </div>
             </div>
-            <div className='sidebar'>
-                <div>
-                    <button className='tab'>{`Vehicles(22)`}</button>
-                    <button className='tab'>{`Assets(5)`}</button>
-                    <button className='tab'>&#x23f4;</button>
+            {
+                showMenu && <div className='sidebar'>
+                    <div>
+                        <button className='tab'>{`Vehicles(22)`}</button>
+                        <button className='tab'>{`Assets(5)`}</button>
+                        <button className='tab' onClick={() => setShowMenu(false)}>&#x23f4;</button>
+                    </div>
+                    <div>
+                        <input type="text" placeholder='search vehicle here' style={{ width: "100%", borderRadius: "10px" }} />
+                    </div>
+                    <div>
+                        {
+                            fakedata.map((el: any, ind: number) => {
+                                return (
+                                    <div key={ind} onClick={() => setShowSubMenu(!showSubMenu)}>
+                                        <div><span>{ind}</span><span>{el.type}</span></div>
+                                        <div>
+                                            <p></p>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
-                <div>
-                    <input type="text" placeholder='search vehicle here'/>
-                </div>
-                <div>
+            }
+            {
+                showSubMenu && <div className='subsidebar'>
                     {
-                        fakedata.map((el:any,ind:number)=>{
-                            return(
-                                <div>
+                        fakedata.map((el: any, ind: number) => {
+                            return (
+                                <div key={ind}>
                                     <div><span>{ind}</span><span>{el.type}</span></div>
                                     <div>
                                         <p></p>
@@ -481,8 +502,13 @@ const CabTracker = ({ sampleData, name }: DataProp) => {
                             )
                         })
                     }
+                    <div>
+                        <button className="btn btn-info btn-sm">message</button>
+                        <button className="btn btn-info btn-sm">call</button>
+                        <button className="btn btn-info btn-sm">current</button>
+                    </div>
                 </div>
-            </div>
+            }
         </>
     );
 };
